@@ -9,6 +9,7 @@ import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
 
 
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -30,6 +31,8 @@ public class Drive extends LinearOpMode {
     double angVel;
     double thetaOffset = 0;
 
+    Limelight3A ll3a;
+
     boolean driveCentric;
 
     int counter = 0;
@@ -37,6 +40,9 @@ public class Drive extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+
+        ll3a = hardwareMap.get(Limelight3A.class, "LL3a");
+
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         MecanumDrive mecDrive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, Math.toRadians(0)));
