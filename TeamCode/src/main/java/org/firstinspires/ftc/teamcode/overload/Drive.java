@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 
+import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.subsystems.*;
 
 
@@ -31,7 +32,9 @@ public class Drive extends LinearOpMode {
     double angVel;
     double thetaOffset = 0;
 
-    Limelight3A ll3a;
+    Follower follower;
+
+    //Limelight3A ll3a;
 
     boolean driveCentric;
 
@@ -41,7 +44,7 @@ public class Drive extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        ll3a = hardwareMap.get(Limelight3A.class, "LL3a");
+        //ll3a = hardwareMap.get(Limelight3A.class, "LL3a");
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
@@ -50,6 +53,9 @@ public class Drive extends LinearOpMode {
         clawSubsystem clawSubsystem = new clawSubsystem(hardwareMap, "wrist", "driver");
         //hMap, name of motor used to change the EXTENSION HEIGHT of the arm/slides
         armSubsystem armSubsystem = new armSubsystem(hardwareMap, "extender", "angle");
+
+
+
         waitForStart();
         //During Initialization:
 
