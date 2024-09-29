@@ -20,9 +20,9 @@ public class armSubsystem extends SubsystemBase {
     private PIDController extendController;
 
     //These values will be set via armPIDTesting once tuned, due to it being the exact same PIDF lol
-    public static double pA = 0, iA = 0, dA = 0, fA = 0;
+    private final double pA = 0, iA = 0, dA = 0, fA = 0;
     //Should be the same with these values
-    public static double pE = 0, iE = 0, dE = 0;
+    private final double pE = 0, iE = 0, dE = 0;
 
     //Arm angle PIDF local variables
     int armPos;
