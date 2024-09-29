@@ -50,9 +50,9 @@ public class Drive extends LinearOpMode {
 
         MecanumDrive mecDrive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, Math.toRadians(0)));
         //hMap, name of servo used for claw
-        clawSubsystem clawSubsystem = new clawSubsystem(hardwareMap, "wrist", "driver");
+        clawSubsystem clawSubsystem = new clawSubsystem(hardwareMap, "clawAngle", "clawDriver");
         //hMap, name of motor used to change the EXTENSION HEIGHT of the arm/slides
-        armSubsystem armSubsystem = new armSubsystem(hardwareMap, "extender", "angle");
+        armSubsystem armSubsystem = new armSubsystem(hardwareMap, "armExt", "armAng");
 
 
 

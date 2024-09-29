@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.controller.PIDController;
+import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -12,8 +14,31 @@ public class armSubsystem extends SubsystemBase {
     //Motor used to change the angle of the arm
     private final DcMotorEx extenderMotor;
     private final DcMotorEx angleMotor;
-    public double armRad;
-    public double armLen;
+
+
+    private PIDFController angleController;
+    private PIDController extendController;
+
+    //These values will be set via armPIDTesting once tuned, due to it being the exact same PIDF lol
+    public static double pA = 0, iA = 0, dA = 0, fA = 0;
+    //Should be the same with these values
+    public static double pE = 0, iE = 0, dE = 0;
+
+    //Arm angle PIDF local variables
+    int armPos;
+    double pidFPower;
+    int targetTicks;
+    int errorF;
+    //Extension PID local variables
+    int extendPos;
+    double powerE;
+
+
+
+
+    private final double ticks_in_degree = 537.7;
+
+
 
 
     public armSubsystem(final HardwareMap hmap, final String extension, final String angle){
@@ -27,4 +52,21 @@ public class armSubsystem extends SubsystemBase {
         extenderMotor.setTargetPosition(inches);
 
     }
+
+    public void setArmAngle(int degrees){
+        angleController.setPIDF(pA, iA, dA, fA);
+        targetTicks = (int) Math.round((degrees * ticks_in_degree));
+
+
+        //Theoretical PIDF goes hard
+        while(errorF != 0) {
+            armPos = angleMotor.getCurrentPosition();
+            pidFPower = angleController.calculate(armPos, targetTicks);
+            errorF = targetTicks - armPos;
+            angleMotor.setPower(pidFPower);
+        }
+
+    }
+
+
 }
