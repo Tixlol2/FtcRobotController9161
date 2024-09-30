@@ -34,13 +34,13 @@ public class pedroDrive extends LinearOpMode {
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-
-        //hMap, name of servo used for claw
-        clawSubsystem clawSubsystem = new clawSubsystem(hardwareMap, "wrist", "driver");
-        //hMap, name of motor used to change the EXTENSION HEIGHT of the arm/slides
-        armSubsystem armSubsystem = new armSubsystem(hardwareMap, "extender", "angle");
-
         follower = new Follower(hardwareMap);
+        //hMap, name of servo used for claw
+        clawSubsystem clawSubsystem = new clawSubsystem(hardwareMap, "clawAngle", "clawDriver");
+        //hMap, name of motor used to change the EXTENSION HEIGHT of the arm/slides
+        armSubsystem armSubsystem = new armSubsystem(hardwareMap, "armExt", "armAng");
+
+
         waitForStart();
         //During Initialization:
 
