@@ -12,8 +12,8 @@ import org.firstinspires.ftc.teamcode.pedroPathing.localization.Encoder;
 public class armSubsystem extends SubsystemBase {
 
     //Motor used to change the angle of the arm
-    private final DcMotorEx extenderMotor;
-    private final DcMotorEx angleMotor;
+    public final DcMotorEx extenderMotor;
+    public final DcMotorEx angleMotor;
 
 
     private PIDFController angleController;
