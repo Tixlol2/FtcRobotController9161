@@ -85,15 +85,14 @@ public class pedroDrive extends LinearOpMode {
             }
             //Testing extendSubsystem
 
-            if(-150 <= target && target <= 600) {
-                target += (int) (Math.pow(gamepad2.left_stick_y, 3) * 8);
-            }
+
+            target += (int) (Math.pow(gamepad2.left_stick_y, 3) * 8);
+
 
             armSubsystem.extenderMotor.setPower(gamepad2.right_stick_y);
 
 
-            if (target < -150){target = -150;}
-            else if (target > 650){target = 650;}
+
 
             // ----------------------------
             // Updaters
