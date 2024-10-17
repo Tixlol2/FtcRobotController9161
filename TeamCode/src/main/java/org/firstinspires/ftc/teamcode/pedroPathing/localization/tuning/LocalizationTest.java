@@ -16,7 +16,9 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.PoseUpdater;
+import org.firstinspires.ftc.teamcode.pedroPathing.localization.localizers.ThreeWheelIMULocalizer;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.DashboardPoseTracker;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.Drawing;
 
@@ -37,6 +39,8 @@ public class LocalizationTest extends OpMode {
     private PoseUpdater poseUpdater;
     private DashboardPoseTracker dashboardPoseTracker;
     private Telemetry telemetryA;
+    private ThreeWheelIMULocalizer threeWheelIMULocalizer;
+
 
     private DcMotorEx leftFront;
     private DcMotorEx leftRear;
@@ -49,7 +53,10 @@ public class LocalizationTest extends OpMode {
      */
     @Override
     public void init() {
-        poseUpdater = new PoseUpdater(hardwareMap);
+
+        threeWheelIMULocalizer = new ThreeWheelIMULocalizer(hardwareMap, new Pose());
+
+        poseUpdater = new PoseUpdater(hardwareMap, threeWheelIMULocalizer);
 
         dashboardPoseTracker = new DashboardPoseTracker(poseUpdater);
 

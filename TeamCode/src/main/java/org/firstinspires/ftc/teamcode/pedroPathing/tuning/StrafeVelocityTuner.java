@@ -16,7 +16,9 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.PoseUpdater;
+import org.firstinspires.ftc.teamcode.pedroPathing.localization.localizers.ThreeWheelIMULocalizer;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.MathFunctions;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Vector;
 
@@ -50,6 +52,7 @@ public class StrafeVelocityTuner extends OpMode {
     private DcMotorEx rightRear;
     private List<DcMotorEx> motors;
 
+    private ThreeWheelIMULocalizer threeWheelIMULocalizer;
     private PoseUpdater poseUpdater;
 
     public static double DISTANCE = 40;
@@ -65,7 +68,9 @@ public class StrafeVelocityTuner extends OpMode {
      */
     @Override
     public void init() {
-        poseUpdater = new PoseUpdater(hardwareMap);
+        threeWheelIMULocalizer = new ThreeWheelIMULocalizer(hardwareMap, new Pose());
+
+        poseUpdater = new PoseUpdater(hardwareMap, threeWheelIMULocalizer);
 
         leftFront = hardwareMap.get(DcMotorEx.class, leftFrontMotorName);
         leftRear = hardwareMap.get(DcMotorEx.class, leftRearMotorName);

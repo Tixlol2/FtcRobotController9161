@@ -8,7 +8,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.PoseUpdater;
+import org.firstinspires.ftc.teamcode.pedroPathing.localization.localizers.ThreeWheelIMULocalizer;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.DashboardPoseTracker;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.Drawing;
 
@@ -31,6 +33,8 @@ public class TurnTuner extends OpMode {
     private PoseUpdater poseUpdater;
     private DashboardPoseTracker dashboardPoseTracker;
 
+    private ThreeWheelIMULocalizer threeWheelIMULocalizer;
+
     private Telemetry telemetryA;
 
     public static double ANGLE = 2 * Math.PI;
@@ -40,7 +44,9 @@ public class TurnTuner extends OpMode {
      */
     @Override
     public void init() {
-        poseUpdater = new PoseUpdater(hardwareMap);
+        threeWheelIMULocalizer = new ThreeWheelIMULocalizer(hardwareMap, new Pose());
+
+        poseUpdater = new PoseUpdater(hardwareMap, threeWheelIMULocalizer);
 
         dashboardPoseTracker = new DashboardPoseTracker(poseUpdater);
 
