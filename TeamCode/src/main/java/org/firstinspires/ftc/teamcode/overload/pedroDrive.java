@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
+import org.firstinspires.ftc.teamcode.subsystems.armPIDFCommand;
 import org.firstinspires.ftc.teamcode.subsystems.armSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.clawSubsystem;
 
@@ -22,6 +23,9 @@ public class pedroDrive extends LinearOpMode {
 
     double deflator;
 
+    int angleTarget = 0;
+    int extendTarget = 0;
+
 
 
     //Limelight3A ll3a;
@@ -33,28 +37,29 @@ public class pedroDrive extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
+
+
+        waitForStart();
+        //During Initialization:
         //ll3a = hardwareMap.get(Limelight3A.class, "LL3a");
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-
 
         //hMap, name of servo used for claw
         clawSubsystem clawSubsystem = new clawSubsystem(hardwareMap, "clawAngle", "clawDriver");
         //hMap, name of motor used to change the EXTENSION HEIGHT of the arm/slides
         armSubsystem armSubsystem = new armSubsystem(hardwareMap, "armExt", "armAng");
+        armPIDFCommand armPIDFCommand = new armPIDFCommand(armSubsystem);
 
         follower = new Follower(hardwareMap);
 
-        waitForStart();
-        //During Initialization:
+        armSubsystem.setDefaultCommand(armPIDFCommand);
 
         follower.startTeleopDrive();
 
 
 
         while (opModeIsActive()) {
-
-
             //Drive
             // ----------------------------
             deflator = gamepad1.left_bumper && gamepad1.right_bumper ? 0.5 : gamepad1.left_bumper ? 0.7 : 1;
@@ -71,18 +76,13 @@ public class pedroDrive extends LinearOpMode {
 
             //Testing clawSubsystem
             if (gamepad2.b) {
-                clawSubsystem.open();
-            } else if (gamepad2.a) {
                 clawSubsystem.close();
+            } else if (gamepad2.a) {
+                clawSubsystem.open();
             }
-            //Testing extendSubsystem
-
-
-
-
-
-            armSubsystem.extenderMotor.setPower(gamepad2.right_stick_y);
-
+            //Testing armSubsystem
+            angleTarget += (int) (Math.pow(gamepad2.left_stick_y, 3) * 8);
+            extendTarget += (int) (gamepad2.right_trigger - gamepad2.left_trigger);
 
 
 
@@ -90,14 +90,11 @@ public class pedroDrive extends LinearOpMode {
             // Updaters
             // ----------------------------
 
-
-
-
             telemetry.addData("Current TK Pos of Angle: ", armSubsystem.getExtenderPos());
             telemetry.addData("Current DEG Pos of Angle: ", armSubsystem.getAngleTargetDG());
 
 
-            telemetry.addData("Current TK Pos of Extension: ", armSubsystem.getAnglePos());
+            telemetry.addData("Current TK Pos of Extension: ", armSubsystem.getExtenderPos());
             telemetry.addData("Current INCH Pos of Extension: ", armSubsystem.getExtenderPosIN());
 
 
@@ -106,6 +103,11 @@ public class pedroDrive extends LinearOpMode {
 
 
             telemetry.update();
+
+            //Controls ArmAngle
+            armSubsystem.setArmAngle(angleTarget);
+            //Controls Extension of Arm
+            armSubsystem.setExtendTarget(extendTarget);
 
             follower.setTeleOpMovementVectors(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, driveCentric);
             follower.update();

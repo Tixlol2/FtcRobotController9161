@@ -35,12 +35,7 @@ public class armSubsystem extends SubsystemBase {
         angleMotor = hmap.get(DcMotorEx.class, angle);
     }
 
-    public void extendIn(int inches){
-        //TODO: Some conversion of an input in INCHES to TICKS so that the motor, extender, lifts the arm system up INCHES.
-        //this works so well 100% (its 2am)
-        extenderMotor.setTargetPosition(inches);
 
-    }
 
     public void setArmAngle(int degrees){
         targetDG = degrees;
