@@ -27,5 +27,5 @@ public class clawSubsystem extends SubsystemBase {
         driverOfClaw.setPosition(closed);
     }
     //Using a dorect connection, this should hold up
-    public void setToAngle(int degrees){angleOfClaw.setPosition((1/360)*degrees);}
+    public void setAnglePosition(double position){angleOfClaw.setPosition(position);}
 }

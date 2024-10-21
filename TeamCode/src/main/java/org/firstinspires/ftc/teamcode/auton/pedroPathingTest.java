@@ -47,8 +47,9 @@ public class pedroPathingTest extends LinearOpMode {
 
         while(opModeIsActive()){
 
-            follower.followPath(newPath);
             follower.update();
+            follower.followPath(newPath);
+
 
 
 
