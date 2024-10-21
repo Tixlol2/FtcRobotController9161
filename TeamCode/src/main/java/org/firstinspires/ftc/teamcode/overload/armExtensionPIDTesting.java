@@ -14,7 +14,7 @@ public class armExtensionPIDTesting extends LinearOpMode {
 
     private PIDController controller;
 
-    public static double p = 0, i = 0, d = 0;
+    public static double p = 0.008, i = 0.05, d = 0;
 
 
     public static int target = 0;
@@ -36,7 +36,8 @@ public class armExtensionPIDTesting extends LinearOpMode {
         waitForStart();
 
         while(!isStopRequested()){
-
+            if(target >= -10){target = -10;}
+            if (target <= -3500){target = -3500;}
             controller.setPID(p, i, d);
             int armPos = arm_motor.getCurrentPosition();
             double pidPower = controller.calculate(armPos, target);
@@ -48,7 +49,7 @@ public class armExtensionPIDTesting extends LinearOpMode {
 
             telemetry.addData("Current Pos: ", armPos);
             telemetry.addData("Current Target: ", target);
-
+            telemetry.update();
 
 
 

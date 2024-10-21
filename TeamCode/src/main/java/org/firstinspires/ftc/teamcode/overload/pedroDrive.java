@@ -5,6 +5,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
+import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -53,7 +54,7 @@ public class pedroDrive extends LinearOpMode {
 
         follower = new Follower(hardwareMap);
 
-        armSubsystem.setDefaultCommand(armPIDFCommand);
+
 
         follower.startTeleopDrive();
 
@@ -90,12 +91,14 @@ public class pedroDrive extends LinearOpMode {
             // Updaters
             // ----------------------------
 
-            telemetry.addData("Current TK Pos of Angle: ", armSubsystem.getExtenderPos());
-            telemetry.addData("Current DEG Pos of Angle: ", armSubsystem.getAngleTargetDG());
+            telemetry.addData("Current TK Pos of Angle: ", armSubsystem.getAnglePos());
+            telemetry.addData("Current Target of Angle: ", armSubsystem.getAngleTargetTK());
 
 
             telemetry.addData("Current TK Pos of Extension: ", armSubsystem.getExtenderPos());
-            telemetry.addData("Current INCH Pos of Extension: ", armSubsystem.getExtenderPosIN());
+            telemetry.addData("Current Target of Extension: ", armSubsystem.getExtTargetTK());
+
+
 
 
             telemetry.addLine("Don't Crash!");
@@ -109,10 +112,14 @@ public class pedroDrive extends LinearOpMode {
             //Controls Extension of Arm
             armSubsystem.setExtendTarget(extendTarget);
 
+            CommandScheduler.getInstance().schedule(armPIDFCommand);
+
             follower.setTeleOpMovementVectors(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, driveCentric);
             follower.update();
             // ----------------------------
         }
+
+
 
     }
 }

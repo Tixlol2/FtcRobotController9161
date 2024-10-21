@@ -40,10 +40,6 @@ public class armSubsystem extends SubsystemBase {
     public void setArmAngle(int degrees){
         targetDG = degrees;
         targetTK = (int) (targetDG / ticks_in_degree);
-
-
-
-
     }
 
     public int getAngleTargetTK(){

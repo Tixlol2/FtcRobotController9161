@@ -28,7 +28,7 @@ public class armPIDFCommand extends CommandBase {
 
     private PIDController pidController;
 
-    public static double pExtend = 0, iExtend = 0, dExtend = 0, fExtend = 0;
+    public static double pExtend = 0.008, iExtend = 0.05, dExtend = 0, fExtend = 0;
 
     public static int target_in_ticksExtend = 0;
 
@@ -41,12 +41,12 @@ public class armPIDFCommand extends CommandBase {
     public armPIDFCommand(armSubsystem subsystem) {
         m_armSubsystem = subsystem;
         addRequirements(m_armSubsystem);
+        pidFController = new PIDController(pAngle, iAngle, dAngle);
+        pidController = new PIDController(pExtend, iExtend, dExtend);
     }
 
     @Override
     public void initialize() {
-        pidFController = new PIDController(pAngle, iAngle, dAngle);
-        pidController = new PIDController(pExtend, iExtend, dExtend);
 
     }
 
@@ -80,9 +80,7 @@ public class armPIDFCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        if (((armAngle >= angleTarget - 10) && (armAngle <= angleTarget + 10)) && ((extendPos >= target_in_ticksExtend - 10) && (extendPos <= target_in_ticksExtend + 10)));   {
-            return true;
-        }
+        return false;
 
     }
 }
