@@ -29,7 +29,7 @@ public class pedroPathingTest extends LinearOpMode {
     Point middle = new Point(60, 108, Point.CARTESIAN);
     Point end = new Point(endPose);
 
-    Path path = new Path(new BezierCurve(middle, end));
+    Path path = new Path(new BezierCurve(middle, end, middle));
 
     @Override
     public void runOpMode() throws InterruptedException {
