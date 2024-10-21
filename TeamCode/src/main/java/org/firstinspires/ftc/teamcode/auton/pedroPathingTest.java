@@ -26,7 +26,7 @@ public class pedroPathingTest extends LinearOpMode {
     Pose endPose = new Pose(11, 110, 180);
 
 
-    Point middle = new Point(middlePose);
+    Point middle = new Point(60, 108, Point.CARTESIAN);
     Point end = new Point(endPose);
 
     Path path = new Path(new BezierCurve(middle, end));
