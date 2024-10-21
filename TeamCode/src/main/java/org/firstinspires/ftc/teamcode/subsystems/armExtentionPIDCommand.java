@@ -5,13 +5,13 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 
 @Config
-public class armAnglePIDFCommand extends CommandBase {
+public class armExtentionPIDCommand extends CommandBase {
 
     private final armSubsystem m_armSubsystem;
 
     private PIDController pidfController;
 
-    public static double p = 0.0035, i = 0.05, d = 0, f = 0;
+    public static double p = 0, i = 0, d = 0, f = 0;
 
     public static int target_in_ticks = 0;
 
@@ -26,7 +26,7 @@ public class armAnglePIDFCommand extends CommandBase {
 
     private final double ticks_in_inch = ticks_in_degree / 4.409;
 
-    public armAnglePIDFCommand(armSubsystem subsystem) {
+    public armExtentionPIDCommand(armSubsystem subsystem) {
         m_armSubsystem = subsystem;
         addRequirements(m_armSubsystem);
     }
@@ -40,15 +40,15 @@ public class armAnglePIDFCommand extends CommandBase {
 
     @Override
     public void execute() {
-        target_in_ticks = m_armSubsystem.getAngleTargetTK();
+        target_in_ticks = m_armSubsystem.getExtTargetTK();
         //Angle motor
         pidfController.setPID(p, i, d);
-        arm_pos = m_armSubsystem.angleMotor.getCurrentPosition();
+        arm_pos = m_armSubsystem.extenderMotor.getCurrentPosition();
         PIDFpower = pidfController.calculate(arm_pos, target_in_ticks);
         feedForward = Math.cos(Math.toRadians(target_in_ticks / ticks_in_degree)) * f;
         power = PIDFpower + feedForward;
-        if(power > .8 ){power = .8;}
-        m_armSubsystem.angleMotor.setPower(power);
+        if(power > .6 ){power = .6;}
+        m_armSubsystem.extenderMotor.setPower(power);
     }
 
     @Override

@@ -19,17 +19,9 @@ public class pedroDrive extends LinearOpMode {
 
     //Class def
 
-    private PIDController controller;
+
     double deflator;
 
-    public static double p = .0035, i = .05, d = 0;
-    public static double f = 0;
-
-    public static int target = 0;
-
-    private final double ticks_in_degree = (751.8 / 3) / 360;
-
-    private final double ticks_in_inch = ticks_in_degree / 4.409;
 
 
     //Limelight3A ll3a;
@@ -42,7 +34,7 @@ public class pedroDrive extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         //ll3a = hardwareMap.get(Limelight3A.class, "LL3a");
-        controller = new PIDController(p, i, d);
+
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
 
@@ -86,7 +78,7 @@ public class pedroDrive extends LinearOpMode {
             //Testing extendSubsystem
 
 
-            target += (int) (Math.pow(gamepad2.left_stick_y, 3) * 8);
+
 
 
             armSubsystem.extenderMotor.setPower(gamepad2.right_stick_y);
@@ -99,17 +91,15 @@ public class pedroDrive extends LinearOpMode {
             // ----------------------------
 
 
-            controller.setPID(p, i, d);
-            int armPos = armSubsystem.angleMotor.getCurrentPosition();
-            double pidPower = controller.calculate(armPos, target);
-            double feedForward = Math.cos(Math.toRadians(target / ticks_in_degree)) * f;
 
-            double power = pidPower + feedForward;
 
-            armSubsystem.angleMotor.setPower(power);
+            telemetry.addData("Current TK Pos of Angle: ", armSubsystem.getExtenderPos());
+            telemetry.addData("Current DEG Pos of Angle: ", armSubsystem.getAngleTargetDG());
 
-            telemetry.addData("Current Pos: ", armPos);
-            telemetry.addData("Current Target: ", target);
+
+            telemetry.addData("Current TK Pos of Extension: ", armSubsystem.getAnglePos());
+            telemetry.addData("Current INCH Pos of Extension: ", armSubsystem.getExtenderPosIN());
+
 
             telemetry.addLine("Don't Crash!");
             telemetry.addData("Driver Centric?", driveCentric);

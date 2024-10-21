@@ -16,22 +16,11 @@ public class armSubsystem extends SubsystemBase {
     public final DcMotorEx angleMotor;
 
 
-    private PIDFController angleController;
-    private PIDController extendController;
+    private int targetDG;
+    private int targetTK;
 
-    //These values will be set via armPIDTesting once tuned, due to it being the exact same PIDF lol
-    private final double pA = 0, iA = 0, dA = 0, fA = 0;
-    //Should be the same with these values
-    private final double pE = 0, iE = 0, dE = 0;
-
-    //Arm angle PIDF local variables
-    int armPos;
-    double pidFPower;
-    int targetTicks;
-    int errorF;
-    //Extension PID local variables
-    int extendPos;
-    double powerE;
+    private int extTargetIN;
+    private int extTargetTK;
 
 
 
@@ -54,19 +43,33 @@ public class armSubsystem extends SubsystemBase {
     }
 
     public void setArmAngle(int degrees){
-        angleController.setPIDF(pA, iA, dA, fA);
-        targetTicks = (int) Math.round((degrees * ticks_in_degree));
+        targetDG = degrees;
+        targetTK = (int) (targetDG / ticks_in_degree);
 
 
-        //Theoretical PIDF goes hard
-        while(errorF != 0) {
-            armPos = angleMotor.getCurrentPosition();
-            pidFPower = angleController.calculate(armPos, targetTicks);
-            errorF = targetTicks - armPos;
-            angleMotor.setPower(pidFPower);
-        }
+
 
     }
 
+    public int getAngleTargetTK(){
+        return targetTK;
+    }
+    public int getAngleTargetDG(){return targetDG;}
+
+    public void setExtendTarget(int inches){
+        extTargetIN = inches;
+        extTargetTK = (int) (extTargetIN * ticks_in_inch);
+
+
+    }
+
+    public int getExtTargetIN(){return extTargetIN;}
+    public int getExtTargetTK(){return extTargetTK;}
+
+    public int getExtenderPos(){return extenderMotor.getCurrentPosition();}
+    public int getAnglePos(){return angleMotor.getCurrentPosition();}
+
+    public int getExtenderPosIN(){return (int) (extenderMotor.getCurrentPosition() * ticks_in_inch);}
+    public int getAnglePosDEG(){return (int) (angleMotor.getCurrentPosition() * ticks_in_degree);}
 
 }
