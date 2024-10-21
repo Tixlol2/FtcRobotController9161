@@ -194,7 +194,7 @@ that applies to you and follow the directions there.
 * Once you're done with all this, your localizer should be tuned. Make sure that `useIMU` is turned back on. To test it out, you can go to
   `Localization Test` and push around or drive around your robot. Go to [FTC Dashboard](http://192.168.43.1:8080/dash)
   and on the top right, switch the drop down from the default view to the field view. Then, on the bottom
-  left corner, you should see a field and the robot being drawn on the field. You can then move your
+  left corner, you should see a field and the robot being drawn on the field. You can then move your 
   robot around and see if the movements look accurate on FTC Dashboard. If they don't, then you'll
   want to re-run some of the previous steps. Otherwise, congrats on tuning your localizer!
 

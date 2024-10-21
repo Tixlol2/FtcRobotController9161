@@ -78,9 +78,9 @@ public class pedroDrive extends LinearOpMode {
             // ----------------------------
 
             //Testing clawSubsystem
-            if (gamepad2.circle){
+            if (gamepad2.b) {
                 clawSubsystem.open();
-                sleep(500);
+            } else if (gamepad2.a) {
                 clawSubsystem.close();
             }
             //Testing extendSubsystem

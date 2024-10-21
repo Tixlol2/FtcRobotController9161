@@ -60,7 +60,7 @@ import java.util.List;
  * @version 1.0, 3/4/2024
  */
 @Config
-@Disabled
+
 public class Follower {
     private HardwareMap hardwareMap;
 

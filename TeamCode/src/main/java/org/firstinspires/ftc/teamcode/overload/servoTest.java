@@ -21,14 +21,14 @@ public class servoTest extends LinearOpMode {
     //Class def
 
 
-    CRServo servo;
+    Servo servo;
 
 
     @Override
     public void runOpMode() throws InterruptedException {
 
         //ll3a = hardwareMap.get(Limelight3A.class, "LL3a");
-        servo = hardwareMap.get(CRServo.class, "Max");
+        servo = hardwareMap.get(Servo.class, "Max");
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
 
@@ -40,8 +40,11 @@ public class servoTest extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            servo.setPower(gamepad1.left_stick_x);
-
+            if (gamepad2.b) {
+                servo.setPosition(.4);
+            } else if (gamepad2.a) {
+                servo.setPosition(1);
+            }
 
         }
     }

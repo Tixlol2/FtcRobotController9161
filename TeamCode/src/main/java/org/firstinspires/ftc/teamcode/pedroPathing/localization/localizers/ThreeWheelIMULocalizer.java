@@ -63,9 +63,9 @@ public class ThreeWheelIMULocalizer extends Localizer {
     private double previousIMUOrientation;
     private double deltaRadians;
     private double totalHeading;
-    public static double FORWARD_TICKS_TO_INCHES = 0.002957;//8192 * 1.37795 * 2 * Math.PI * 0.5008239963;
-    public static double STRAFE_TICKS_TO_INCHES = -0.003127403096038503;//8192 * 1.37795 * 2 * Math.PI * 0.5018874659;
-    public static double TURN_TICKS_TO_RADIANS = 0.002995;//8192 * 1.37795 * 2 * Math.PI * 0.5;
+    public static double FORWARD_TICKS_TO_INCHES = 0.002945483087309256;//8192 * 1.37795 * 2 * Math.PI * 0.5008239963;
+    public static double STRAFE_TICKS_TO_INCHES = -0.002922426122133224;//8192 * 1.37795 * 2 * Math.PI * 0.5018874659;
+    public static double TURN_TICKS_TO_RADIANS = .0031;//8192 * 1.37795 * 2 * Math.PI * 0.5;
 
     public static boolean useIMU = true;
 
@@ -93,7 +93,7 @@ public class ThreeWheelIMULocalizer extends Localizer {
         // replaced this with your IMU's orientation
         imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.LEFT, RevHubOrientationOnRobot.UsbFacingDirection.UP)));
 
-        // TODO: check if good
+
         // replaced these with your encoder positions
         leftEncoderPose = new Pose(1.53, -6.4, 0);
         rightEncoderPose = new Pose(-1.53, 6.4, 0);
@@ -103,17 +103,16 @@ public class ThreeWheelIMULocalizer extends Localizer {
         //replaced these with your encoder ports
         leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "leftFront"));
         rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "rightFront"));
-        strafeEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "leftBack"));
+        strafeEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "leftRear"));
 
         //reversed any encoders necessary
-        leftEncoder.setDirection(Encoder.REVERSE);
+        leftEncoder.setDirection(Encoder.REVERSE );
         rightEncoder.setDirection(Encoder.FORWARD);
         strafeEncoder.setDirection(Encoder.FORWARD);
 
         setStartPose(setStartPose);
         timer = new NanoTimer();
-        deltaTimeNano = 1;
-        displacementPose = new Pose();
+        deltaTimeNano = 1;        displacementPose = new Pose();
         currentVelocity = new Pose();
         totalHeading = 0;
 

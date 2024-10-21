@@ -9,8 +9,8 @@ public class clawSubsystem extends SubsystemBase {
     private final Servo angleOfClaw;
     private final Servo driverOfClaw;
     //TODO: Figure out what these values are
-    private final float open = 1;
-    private final float closed = 0;
+    private final double open = .4;
+    private final double closed = 1;
 
 
     //hMap is understandable, name is the name of the servo used
