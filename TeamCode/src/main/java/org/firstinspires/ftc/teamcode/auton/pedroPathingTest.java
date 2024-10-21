@@ -30,9 +30,7 @@ public class pedroPathingTest extends LinearOpMode {
     Point end = new Point(endPose);
 
     Path path = new Path(new BezierCurve(middle, end));
-    PathChain newPath = follower.pathBuilder()
-            .addPath(path)
-            .build();
+
     @Override
     public void runOpMode() throws InterruptedException {
 
@@ -43,7 +41,9 @@ public class pedroPathingTest extends LinearOpMode {
         follower = new Follower(hardwareMap);
         follower.setStartingPose(startPose);
 
-
+        PathChain newPath = follower.pathBuilder()
+                .addPath(path)
+                .build();
 
         while(opModeIsActive()){
 
