@@ -128,7 +128,7 @@ public class pedroDrive extends LinearOpMode {
             follower.setTeleOpMovementVectors(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, driveCentric);
             follower.update();
 
-            //Call telemetry at the end because the smart guy on the FTC dicord server said to
+            //Call telemetry at the end because the smart guy on the FTC discord server said to
             telemetry.update();
             // ----------------------------
         }
