@@ -40,18 +40,15 @@ public class pedroPathingTest extends LinearOpMode {
 
         follower = new Follower(hardwareMap);
         follower.setStartingPose(startPose);
-        follower.resetIMU();
+
         PathChain newPath = follower.pathBuilder()
                 .addPath(path)
                 .build();
-        follower.followPath(newPath);
-
 
         while(opModeIsActive()){
 
+            follower.followPath(newPath);
             follower.update();
-
-
 
 
 

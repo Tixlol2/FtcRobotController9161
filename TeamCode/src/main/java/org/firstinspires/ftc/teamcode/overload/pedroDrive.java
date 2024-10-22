@@ -81,6 +81,12 @@ public class pedroDrive extends LinearOpMode {
             } else if (gamepad2.a) {
                 clawSubsystem.open();
             }
+            if (gamepad2.x) {
+                clawSubsystem.setAnglePosition(1);
+            } else if (gamepad2.y) {
+                clawSubsystem.setAnglePosition(0);
+            }
+
             //Testing armSubsystem
             angleTarget += (int) (Math.pow(gamepad2.left_stick_y, 3) * 8);
             extendTarget += (int) (gamepad2.right_trigger - gamepad2.left_trigger);
