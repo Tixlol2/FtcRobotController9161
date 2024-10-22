@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Path;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
+import org.firstinspires.ftc.teamcode.subsystems.armSubsystem;
 
 @Autonomous
 public class pedroPathingTest extends LinearOpMode {
@@ -31,21 +32,20 @@ public class pedroPathingTest extends LinearOpMode {
 
     Path path = new Path(new BezierCurve(middle, end, middle));
 
+    armSubsystem armSubsystem = new armSubsystem(hardwareMap, "armExt", "armAng");
+
     @Override
     public void runOpMode() throws InterruptedException {
 
         waitForStart();
-
-
-
         follower = new Follower(hardwareMap);
         follower.setStartingPose(startPose);
-        follower.resetIMU();
+
         PathChain newPath = follower.pathBuilder()
                 .addPath(path)
                 .build();
         follower.followPath(newPath);
-
+        armSubsystem.angleMotor.setPower(-.2);
 
         while(opModeIsActive()){
 

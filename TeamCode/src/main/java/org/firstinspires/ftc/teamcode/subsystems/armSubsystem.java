@@ -22,17 +22,67 @@ public class armSubsystem extends SubsystemBase {
     private int extTargetIN;
     private int extTargetTK;
 
+    private PIDController pidFController;
+
+    public static double pAngle = 0.0035, iAngle = 0.05, dAngle = 0, fAngle = 0;
+
+    public static int angleTarget = 0;
 
 
 
-    private final double ticks_in_degree = (751.8 / 3) / 360;
+    private int armAngle;
+    public double anglePower;
+    private double anglePIDFpower;
+    private double anglefeedForward;
 
-    private final double ticks_in_inch = ticks_in_degree / 4.409;
+    private final double ticks_in_degree = (751.8 / 4) / 360;
+
+    private final double ticks_in_inch = (537.7 / 112) / 25.4;
+
+    private PIDController pidController;
+
+    public static double pExtend = 0.008, iExtend = 0.05, dExtend = 0, fExtend = 0;
+
+    public static int target_in_ticksExtend = 0;
+
+
+    private int extendPos;
+    public double powerExtension;
+    private double PIDFpowerExtend;
+
+
 
 
     public armSubsystem(final HardwareMap hmap, final String extension, final String angle){
         extenderMotor = hmap.get(DcMotorEx.class, extension);
         angleMotor = hmap.get(DcMotorEx.class, angle);
+    }
+    @Override
+    public void periodic(){
+
+        angleTarget = getAngleTargetTK();
+        //Angle motor
+        pidFController.setPID(pAngle, iAngle, dAngle);
+        armAngle = angleMotor.getCurrentPosition();
+        anglePIDFpower = pidFController.calculate(armAngle, angleTarget);
+        anglefeedForward = Math.cos(Math.toRadians(angleTarget / ticks_in_degree)) * fAngle;
+        anglePower = anglePIDFpower + anglefeedForward;
+        if(anglePower > .8 ){
+            anglePower = .8;
+        }
+        angleMotor.setPower(anglePower);
+
+        target_in_ticksExtend = getExtTargetTK();
+        //Extension motor
+        pidController.setPID(pExtend, iExtend, dExtend);
+        extendPos = extenderMotor.getCurrentPosition();
+        PIDFpowerExtend = pidController.calculate(extendPos, target_in_ticksExtend);
+
+        powerExtension = PIDFpowerExtend;
+        if(powerExtension > .6 ){
+            powerExtension = .6;}
+        extenderMotor.setPower(powerExtension);
+
     }
 
 

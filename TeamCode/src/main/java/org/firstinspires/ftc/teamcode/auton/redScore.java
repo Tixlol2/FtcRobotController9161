@@ -40,7 +40,7 @@ public class redScore extends LinearOpMode {
 
 
         getToMiddle = follower.pathBuilder()
-                .addPath(new Path(new BezierCurve(new Point(middleSpec), new Point(middleSpec.getX() + .1, middleSpec.getY() + .1, 1), new Point(middleSpec))))
+                .addPath(new Path(new BezierCurve(new Point(middleSpec), new Point(middleSpec.getX() + .0001, middleSpec.getY() + .0001, 1), new Point(middleSpec))))
                 .setConstantHeadingInterpolation(middleSpec.getHeading())
                 .build();
 

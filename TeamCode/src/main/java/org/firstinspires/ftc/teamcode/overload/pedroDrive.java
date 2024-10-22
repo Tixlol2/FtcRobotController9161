@@ -5,6 +5,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
+import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -32,6 +33,7 @@ public class pedroDrive extends LinearOpMode {
     //Limelight3A ll3a;
     Follower follower;
     boolean driveCentric;
+    CommandScheduler commandScheduler;
 
 
 
@@ -44,6 +46,7 @@ public class pedroDrive extends LinearOpMode {
         //During Initialization:
         //ll3a = hardwareMap.get(Limelight3A.class, "LL3a");
 
+        commandScheduler = CommandScheduler.getInstance();
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         //hMap, name of servo used for claw
@@ -99,23 +102,34 @@ public class pedroDrive extends LinearOpMode {
             telemetry.addData("Current Target of Extension: ", armSubsystem.getExtTargetTK());
 
 
+            telemetry.addData("Motor Power Ang", armSubsystem.angleMotor.getPower());
+            telemetry.addData("Motor Power Ext", armSubsystem.extenderMotor.getPower());
+
+            telemetry.addData("PID Power Ang", armSubsystem.anglePower);
+            telemetry.addData("PID Power Ext", armSubsystem.powerExtension);
+
 
 
             telemetry.addLine("Don't Crash!");
             telemetry.addData("Driver Centric?", driveCentric);
 
 
-            telemetry.update();
+
 
             //Controls ArmAngle
             armSubsystem.setArmAngle(angleTarget);
             //Controls Extension of Arm
             armSubsystem.setExtendTarget(extendTarget);
 
-            CommandScheduler.getInstance().schedule(armPIDFCommand);
+            commandScheduler.schedule(armPIDFCommand);
+            commandScheduler.run();
+
 
             follower.setTeleOpMovementVectors(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, driveCentric);
             follower.update();
+
+            //Call telemetry at the end because the smart guy on the FTC dicord server said to
+            telemetry.update();
             // ----------------------------
         }
 
