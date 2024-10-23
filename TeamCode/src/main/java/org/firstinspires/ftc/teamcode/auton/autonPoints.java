@@ -39,7 +39,6 @@ public class autonPoints {
     public Pose middleRedSpecimen = new Pose(98, 132);
     public Pose rightRedSpecimen = new Pose(98, 144);
 
-
     public Pose leftBlueSpecimen = new Pose(46, 0);
     public Pose middleBlueSpecimen = new Pose(46, 12);
     public Pose rightBlueSpecimen = new Pose(46, 24);
@@ -57,6 +56,13 @@ public class autonPoints {
 
     public Pose redRungMidpoint = new Pose(96, 72);
     public Pose blueRungMidpoint = new Pose(48, 72);
+
+    public Pose redScore = new Pose(132, 12);
+    public Pose blueScore = new Pose(12, 132);
+
+    public Pose redPark = new Pose(132,132);
+    public Pose bluePark = new Pose(12, 12);
+
 
 
 

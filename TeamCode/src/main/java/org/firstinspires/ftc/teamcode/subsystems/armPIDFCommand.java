@@ -53,6 +53,9 @@ public class armPIDFCommand extends CommandBase {
     @Override
     public void execute() {
         angleTarget = m_armSubsystem.getAngleTargetTK();
+        if(angleTarget >= -10){
+            angleTarget = -10;
+        } else if (angleTarget <= -500){angleTarget = -500;}
         //Angle motor
         pidFController.setPID(pAngle, iAngle, dAngle);
         armAngle = m_armSubsystem.angleMotor.getCurrentPosition();
@@ -61,18 +64,22 @@ public class armPIDFCommand extends CommandBase {
         anglePower = anglePIDFpower + anglefeedForward;
         if(anglePower > .8 ){
             anglePower = .8;
-        }
+        } else if (anglePower < -.8){anglePower = -.8;}
         m_armSubsystem.angleMotor.setPower(anglePower);
 
         target_in_ticksExtend = m_armSubsystem.getExtTargetTK();
         //Extension motor
+        if(target_in_ticksExtend >= -100){
+            target_in_ticksExtend = -100;
+        } else if (target_in_ticksExtend <= -3550){angleTarget = -3550;}
         pidController.setPID(pExtend, iExtend, dExtend);
         extendPos = m_armSubsystem.extenderMotor.getCurrentPosition();
         PIDFpowerExtend = pidController.calculate(extendPos, target_in_ticksExtend);
 
         powerExtension = PIDFpowerExtend;
-        if(powerExtension > .6 ){
-            powerExtension = .6;}
+        if(powerExtension > .8 ){
+            powerExtension = .8;
+        } else if (powerExtension < -.8){powerExtension = -.8;}
         m_armSubsystem.extenderMotor.setPower(powerExtension);
 
 

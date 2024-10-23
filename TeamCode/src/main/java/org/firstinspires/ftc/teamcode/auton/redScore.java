@@ -76,15 +76,16 @@ public class redScore extends LinearOpMode {
                 clawSubsystem.setAnglePosition(1);
                 //Retracts the arm
                 armSubsystem.setExtendTarget(-8);
+                setPathState(1);
+                break;
+            case 1:
                 //set the angle of the arm to be able to reach the top box
                 armSubsystem.setArmAngle(120);
                 //extend to reach the top box
                 armSubsystem.setExtendTarget(48);
                 //Should be able to just drop the spec?
                 clawSubsystem.open();
-                setPathState(1);
-                break;
-            case 1:
+                setPathState(2);
         }
 
 
