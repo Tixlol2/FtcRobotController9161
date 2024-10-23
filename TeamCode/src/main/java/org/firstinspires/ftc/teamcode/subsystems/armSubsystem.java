@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -56,32 +57,12 @@ public class armSubsystem extends SubsystemBase {
     public armSubsystem(final HardwareMap hmap, final String extension, final String angle){
         extenderMotor = hmap.get(DcMotorEx.class, extension);
         angleMotor = hmap.get(DcMotorEx.class, angle);
+
     }
     @Override
     public void periodic(){
 
-        angleTarget = getAngleTargetTK();
-        //Angle motor
-        pidFController.setPID(pAngle, iAngle, dAngle);
-        armAngle = angleMotor.getCurrentPosition();
-        anglePIDFpower = pidFController.calculate(armAngle, angleTarget);
-        anglefeedForward = Math.cos(Math.toRadians(angleTarget / ticks_in_degree)) * fAngle;
-        anglePower = anglePIDFpower + anglefeedForward;
-        if(anglePower > .8 ){
-            anglePower = .8;
-        }
-        angleMotor.setPower(anglePower);
 
-        target_in_ticksExtend = getExtTargetTK();
-        //Extension motor
-        pidController.setPID(pExtend, iExtend, dExtend);
-        extendPos = extenderMotor.getCurrentPosition();
-        PIDFpowerExtend = pidController.calculate(extendPos, target_in_ticksExtend);
-
-        powerExtension = PIDFpowerExtend;
-        if(powerExtension > .6 ){
-            powerExtension = .6;}
-        extenderMotor.setPower(powerExtension);
 
     }
 
@@ -112,5 +93,14 @@ public class armSubsystem extends SubsystemBase {
 
     public int getExtenderPosIN(){return (int) (extenderMotor.getCurrentPosition() * ticks_in_inch);}
     public int getAnglePosDEG(){return (int) (angleMotor.getCurrentPosition() * ticks_in_degree);}
+
+    public void resetEncoders(){
+        angleMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        extenderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        angleMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        extenderMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+    }
 
 }

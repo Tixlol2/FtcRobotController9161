@@ -46,6 +46,8 @@ public class pedroDrive extends LinearOpMode {
         //During Initialization:
         //ll3a = hardwareMap.get(Limelight3A.class, "LL3a");
 
+
+
         commandScheduler = CommandScheduler.getInstance();
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
@@ -54,6 +56,13 @@ public class pedroDrive extends LinearOpMode {
         //hMap, name of motor used to change the EXTENSION HEIGHT of the arm/slides
         armSubsystem armSubsystem = new armSubsystem(hardwareMap, "armExt", "armAng");
         armPIDFCommand armPIDFCommand = new armPIDFCommand(armSubsystem);
+
+        armSubsystem.setArmAngle(0);
+        armSubsystem.setExtendTarget(0);
+
+        armSubsystem.resetEncoders();
+
+        armSubsystem.setDefaultCommand(armPIDFCommand);
 
         follower = new Follower(hardwareMap);
 
@@ -91,8 +100,8 @@ public class pedroDrive extends LinearOpMode {
             }
 
             //Testing armSubsystem
-            angleTarget += (int) (Math.pow(gamepad2.left_stick_y, 3) * 8);
-            extendTarget += (int) (gamepad2.right_trigger - gamepad2.left_trigger);
+            angleTarget += (int) (Math.pow(gamepad2.left_stick_y, 3) * 4);
+            extendTarget += (int) (Math.pow(gamepad2.right_stick_y, 3) * 120);
 
 
 
@@ -127,7 +136,7 @@ public class pedroDrive extends LinearOpMode {
             //Controls Extension of Arm
             armSubsystem.setExtendTarget(extendTarget);
 
-            commandScheduler.schedule(armPIDFCommand);
+
             commandScheduler.run();
 
 
@@ -138,6 +147,7 @@ public class pedroDrive extends LinearOpMode {
             telemetry.update();
             // ----------------------------
         }
+
 
 
 

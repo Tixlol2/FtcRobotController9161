@@ -11,7 +11,7 @@ public class armPIDFCommand extends CommandBase {
 
     private PIDController pidFController;
 
-    public static double pAngle = 0.0035, iAngle = 0.05, dAngle = 0, fAngle = 0;
+    public static double pAngle = .0025, iAngle = .08, dAngle = 0.0005, fAngle = -0.12;
 
     public static int angleTarget = 0;
 
@@ -22,13 +22,13 @@ public class armPIDFCommand extends CommandBase {
     private double anglePIDFpower;
     private double anglefeedForward;
 
-    private final double ticks_in_degree = (751.8 / 4) / 360;
+    private final double ticks_in_degree = (751.8 * 4) / 360;
 
     private final double ticks_in_inch = (537.7 / 112) / 25.4;
 
     private PIDController pidController;
 
-    public static double pExtend = 0.008, iExtend = 0.05, dExtend = 0, fExtend = 0;
+    public static double pExtend = 0.008, iExtend = 0, dExtend = 0, fExtend = 0;
 
     public static int target_in_ticksExtend = 0;
 
@@ -57,7 +57,7 @@ public class armPIDFCommand extends CommandBase {
         pidFController.setPID(pAngle, iAngle, dAngle);
         armAngle = m_armSubsystem.angleMotor.getCurrentPosition();
         anglePIDFpower = pidFController.calculate(armAngle, angleTarget);
-        anglefeedForward = Math.cos(Math.toRadians(angleTarget / ticks_in_degree)) * fAngle;
+        anglefeedForward = Math.cos(Math.toRadians(armAngle / ticks_in_degree)) * fAngle;
         anglePower = anglePIDFpower + anglefeedForward;
         if(anglePower > .8 ){
             anglePower = .8;
