@@ -57,10 +57,9 @@ public class pedroDrive extends LinearOpMode {
         armSubsystem armSubsystem = new armSubsystem(hardwareMap, "armExt", "armAng");
         armPIDFCommand armPIDFCommand = new armPIDFCommand(armSubsystem);
 
-        armSubsystem.setArmAngle(0);
-        armSubsystem.setExtendTarget(0);
 
-        armSubsystem.resetEncoders();
+
+
 
         armSubsystem.setDefaultCommand(armPIDFCommand);
 
