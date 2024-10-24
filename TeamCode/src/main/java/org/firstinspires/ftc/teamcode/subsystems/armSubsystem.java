@@ -36,7 +36,7 @@ public class armSubsystem extends SubsystemBase {
     private double anglePIDFpower;
     private double anglefeedForward;
 
-    private final double ticks_in_degree = (751.8 / 4) / 360;
+    private final double ticks_in_degree = (751.8 * 4) / 360;
 
     private final double ticks_in_inch = (537.7 / 112) / 25.4;
 

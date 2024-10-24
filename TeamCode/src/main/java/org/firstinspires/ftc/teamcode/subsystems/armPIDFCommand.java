@@ -11,9 +11,9 @@ public class armPIDFCommand extends CommandBase {
 
     private PIDController pidFController;
 
-    public static double pAngle = .0025, iAngle = .08, dAngle = 0.0005, fAngle = -0.12;
+    public  double pAngle = .0025, iAngle = 0.08, dAngle = 0.000, fAngle = -0.08;
 
-    public static int angleTarget = 0;
+    public  int angleTarget = 0;
 
 
 
@@ -28,9 +28,9 @@ public class armPIDFCommand extends CommandBase {
 
     private PIDController pidController;
 
-    public static double pExtend = 0.008, iExtend = 0, dExtend = 0, fExtend = 0;
+    public  double pExtend = 0.008, iExtend = 0, dExtend = 0, fExtend = 0;
 
-    public static int target_in_ticksExtend = 0;
+    public  int target_in_ticksExtend = 0;
 
 
 

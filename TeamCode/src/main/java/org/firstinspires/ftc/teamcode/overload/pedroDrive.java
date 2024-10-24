@@ -24,9 +24,11 @@ public class pedroDrive extends LinearOpMode {
 
 
     double deflator;
+    double deflator2;
 
     int angleTarget = 0;
     int extendTarget = 0;
+    double clawTarget = 0;
 
 
 
@@ -74,7 +76,10 @@ public class pedroDrive extends LinearOpMode {
         while (opModeIsActive()) {
             //Drive
             // ----------------------------
-            deflator = gamepad1.left_bumper && gamepad1.right_bumper ? 0.5 : gamepad1.left_bumper ? 0.7 : 1;
+
+            deflator = gamepad2.left_bumper && gamepad2.right_bumper ? 0.5 : gamepad2.left_bumper ? 0.7 : 1;
+            deflator2 = gamepad2.left_bumper && gamepad2.right_bumper ? 0.5 : gamepad2.left_bumper ? 0.7 : 1;
+
             if (gamepad1.b) {
                 driveCentric = false;
             } else if (gamepad1.a) {
@@ -99,8 +104,10 @@ public class pedroDrive extends LinearOpMode {
             }
 
             //Testing armSubsystem
-            angleTarget += (int) (Math.pow(gamepad2.left_stick_y, 3) * 4);
-            extendTarget += (int) (Math.pow(gamepad2.right_stick_y, 3) * 120);
+            clawTarget += (Math.pow(gamepad2.left_trigger + -gamepad2.right_trigger,2) * 0.1 * deflator);
+
+            angleTarget += (int) (Math.pow(gamepad2.left_stick_y, 3) * 20*deflator);
+            extendTarget += (int) (Math.pow(gamepad2.right_stick_y, 3) * 120*deflator);
 
 
 
@@ -139,7 +146,7 @@ public class pedroDrive extends LinearOpMode {
             commandScheduler.run();
 
 
-            follower.setTeleOpMovementVectors(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, driveCentric);
+            follower.setTeleOpMovementVectors(-gamepad1.left_stick_y*deflator2, -gamepad1.left_stick_x*deflator2, -gamepad1.right_stick_x*deflator2, driveCentric);
             follower.update();
 
             //Call telemetry at the end because the smart guy on the FTC discord server said to
