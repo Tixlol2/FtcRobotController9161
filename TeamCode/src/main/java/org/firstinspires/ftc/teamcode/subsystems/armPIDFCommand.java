@@ -41,7 +41,7 @@ public class armPIDFCommand extends CommandBase {
     public armPIDFCommand(armSubsystem subsystem) {
         m_armSubsystem = subsystem;
         addRequirements(m_armSubsystem);
-        pidFController = new PIDController(pAngle, iAngle, dAngle);
+        //pidFController = new PIDController(pAngle, iAngle, dAngle);
         pidController = new PIDController(pExtend, iExtend, dExtend);
     }
 
@@ -52,20 +52,20 @@ public class armPIDFCommand extends CommandBase {
 
     @Override
     public void execute() {
-        angleTarget = m_armSubsystem.getAngleTargetTK();
-        if(angleTarget >= -10){
-            angleTarget = -10;
-        } else if (angleTarget <= -500){angleTarget = -500;}
-        //Angle motor
-        pidFController.setPID(pAngle, iAngle, dAngle);
-        armAngle = m_armSubsystem.angleMotor.getCurrentPosition();
-        anglePIDFpower = pidFController.calculate(armAngle, angleTarget);
-        anglefeedForward = Math.cos(Math.toRadians(armAngle / ticks_in_degree)) * fAngle;
-        anglePower = anglePIDFpower + anglefeedForward;
-        if(anglePower > .8 ){
-            anglePower = .8;
-        } else if (anglePower < -.8){anglePower = -.8;}
-        m_armSubsystem.angleMotor.setPower(anglePower);
+//        angleTarget = m_armSubsystem.getAngleTargetTK();
+//        if(angleTarget >= -10){
+//            angleTarget = -10;
+//        } else if (angleTarget <= -500){angleTarget = -500;}
+//        //Angle motor
+//        pidFController.setPID(pAngle, iAngle, dAngle);
+//        armAngle = m_armSubsystem.angleMotor.getCurrentPosition();
+//        anglePIDFpower = pidFController.calculate(armAngle, angleTarget);
+//        anglefeedForward = Math.cos(Math.toRadians(armAngle / ticks_in_degree)) * fAngle;
+//        anglePower = anglePIDFpower + anglefeedForward;
+//        if(anglePower > .8 ){
+//            anglePower = .8;
+//        } else if (anglePower < -.8){anglePower = -.8;}
+//        m_armSubsystem.angleMotor.setPower(anglePower);
 
         target_in_ticksExtend = m_armSubsystem.getExtTargetTK();
         //Extension motor

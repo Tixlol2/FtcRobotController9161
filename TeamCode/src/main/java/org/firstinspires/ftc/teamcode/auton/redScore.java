@@ -48,8 +48,10 @@ public class redScore extends LinearOpMode {
         while(!isStopRequested()){
             //Main Function
 
+            follower.update();
 
             autonomousPathUpdate();
+
 
 
 

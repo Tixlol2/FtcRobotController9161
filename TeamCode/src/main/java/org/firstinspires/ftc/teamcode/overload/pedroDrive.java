@@ -39,6 +39,18 @@ public class pedroDrive extends LinearOpMode {
 
 
 
+    private PIDController pidFController;
+
+    public  double pAngle = .0025, iAngle = 0, dAngle = 0.000, fAngle = -0.08;
+    private final double ticks_in_degree = (751.8 * 4) / 360;
+
+    private int armAngle;
+    private double anglePower;
+    private double anglePIDFpower;
+    private double anglefeedForward;
+
+
+
     @Override
     public void runOpMode() throws InterruptedException {
 
@@ -138,7 +150,21 @@ public class pedroDrive extends LinearOpMode {
 
 
             //Controls ArmAngle
-            armSubsystem.setArmAngle(angleTarget);
+            //armSubsystem.setArmAngle(angleTarget);
+
+            if(angleTarget >= -10){
+                angleTarget = -10;
+            } else if (angleTarget <= -500){angleTarget = -500;}
+            //Angle motor
+            pidFController.setPID(pAngle, iAngle, dAngle);
+            armAngle = armSubsystem.angleMotor.getCurrentPosition();
+            anglePIDFpower = pidFController.calculate(armAngle, angleTarget);
+            anglefeedForward = Math.cos(Math.toRadians(armAngle / ticks_in_degree)) * fAngle;
+            anglePower = anglePIDFpower + anglefeedForward;
+            if(anglePower > .8 ){
+                anglePower = .8;
+            } else if (anglePower < -.8){anglePower = -.8;}
+            armSubsystem.angleMotor.setPower(anglePower);
             //Controls Extension of Arm
             armSubsystem.setExtendTarget(extendTarget);
 
