@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierCurve;
+import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierLine;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Path;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
@@ -30,7 +31,7 @@ public class pedroPathingTest extends LinearOpMode {
     Point middle = new Point(60, 108, Point.CARTESIAN);
     Point end = new Point(endPose);
 
-    Path path = new Path(new BezierCurve(middle, end, middle));
+    Path path = new Path(new BezierLine(middle, end));
 
     armSubsystem armSubsystem = new armSubsystem(hardwareMap, "armExt", "armAng");
 
@@ -43,9 +44,10 @@ public class pedroPathingTest extends LinearOpMode {
 
         PathChain newPath = follower.pathBuilder()
                 .addPath(path)
+                .setLinearHeadingInterpolation(0, Math.toRadians(180))
                 .build();
         follower.followPath(newPath);
-        armSubsystem.angleMotor.setPower(-.2);
+        armSubsystem.setArmAngle(-30);
 
         while(opModeIsActive()){
 
