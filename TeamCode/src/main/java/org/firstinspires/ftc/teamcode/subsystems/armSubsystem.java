@@ -25,9 +25,9 @@ public class armSubsystem extends SubsystemBase {
 
     private PIDController pidFController;
 
-    public static double pAngle = 0.0035, iAngle = 0.05, dAngle = 0, fAngle = 0;
+    public  double pAngle = 0.0035, iAngle = 0.05, dAngle = 0, fAngle = 0;
 
-    public static int angleTarget = 0;
+    public  int angleTarget = 0;
 
 
 
@@ -42,9 +42,9 @@ public class armSubsystem extends SubsystemBase {
 
     private PIDController pidController;
 
-    public static double pExtend = 0.008, iExtend = 0.05, dExtend = 0, fExtend = 0;
+    public  double pExtend = 0.008, iExtend = 0.05, dExtend = 0, fExtend = 0;
 
-    public static int target_in_ticksExtend = 0;
+    public  int target_in_ticksExtend = 0;
 
 
     private int extendPos;
@@ -59,18 +59,17 @@ public class armSubsystem extends SubsystemBase {
         angleMotor = hmap.get(DcMotorEx.class, angle);
 
     }
-    @Override
-    public void periodic(){
 
-
-
-    }
 
 
 
     public void setArmAngle(int degrees){
         targetDG = degrees;
         targetTK = (int) (targetDG / ticks_in_degree);
+    }
+
+    public void setArmTarget(int ticks) {
+        targetTK = ticks;
     }
 
     public int getAngleTargetTK(){

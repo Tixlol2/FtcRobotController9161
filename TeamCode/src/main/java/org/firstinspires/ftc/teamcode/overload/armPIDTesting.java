@@ -14,8 +14,8 @@ public class armPIDTesting extends LinearOpMode {
 
     private PIDController controller;
 
-    public static double p = 0, i = 0, d = 0;
-    public static double f = -.1;
+    public static double p = 0.0028, i = 0.05, d = 0.0002;
+    public static double f = -.15;
 
     public static int target = 0;
 
@@ -39,7 +39,7 @@ public class armPIDTesting extends LinearOpMode {
 
         while(!isStopRequested()){
 
-            controller.setPID(p, i, d);
+            //controller.setPID(p, i, d);
             int armPos = arm_motor.getCurrentPosition();
             double pidPower = controller.calculate(armPos, target);
             double feedForward = Math.cos(Math.toRadians(armPos / ticks_in_degree)) * f;
