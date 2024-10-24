@@ -59,18 +59,17 @@ public class armSubsystem extends SubsystemBase {
         angleMotor = hmap.get(DcMotorEx.class, angle);
 
     }
-    @Override
-    public void periodic(){
 
-
-
-    }
 
 
 
     public void setArmAngle(int degrees){
         targetDG = degrees;
         targetTK = (int) (targetDG / ticks_in_degree);
+    }
+
+    public void setArmTarget(int ticks) {
+        targetTK = ticks;
     }
 
     public int getAngleTargetTK(){
