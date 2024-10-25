@@ -43,7 +43,7 @@ public class pedroDrive extends LinearOpMode {
 
 
 
-    public  double pAngle = .0025, iAngle = 0, dAngle = 0.000, fAngle = -0.08;
+    public  double pAngle = .0028, iAngle = 0, dAngle = 0.000, fAngle = -0.01;
     public static double pExtend = 0.008, iExtend = 0, dExtend = 0;
     private final double ticks_in_degree = (751.8 * 4) / 360;
     private final double ticks_in_inch = (537.7 / 112) / 25.4;
@@ -86,7 +86,7 @@ public class pedroDrive extends LinearOpMode {
 
 
 
-        armSubsystem.setDefaultCommand(armPIDFCommand);
+
 
         follower = new Follower(hardwareMap);
 
@@ -108,12 +108,6 @@ public class pedroDrive extends LinearOpMode {
             } else if (gamepad1.a) {
                 driveCentric = true;
             }
-
-
-            // ----------------------------
-            // Other Funcs Used in TeleOp
-            // ----------------------------
-
             //Testing clawSubsystem
             if (gamepad2.b) {
                 clawSubsystem.close();
@@ -128,9 +122,8 @@ public class pedroDrive extends LinearOpMode {
 
             //Testing armSubsystem
             clawTarget += (Math.pow(gamepad2.left_trigger + -gamepad2.right_trigger,2) * 0.1 * deflator);
-
-            angleTarget += (int) (Math.pow(gamepad2.left_stick_y, 3) * 20*deflator);
-            extendTarget += (int) (Math.pow(gamepad2.right_stick_y, 3) * 120*deflator);
+            angleTarget += (int) (Math.pow(gamepad2.left_stick_y, 3) * 4 *deflator);
+            extendTarget += (int) (Math.pow(gamepad2.right_stick_y, 3) * 40 *deflator);
 
 
 
@@ -138,15 +131,14 @@ public class pedroDrive extends LinearOpMode {
             // Updaters
             // ----------------------------
 
-            telemetry.addData("Current TK Pos of Angle: ", armSubsystem.getAnglePos());
-            telemetry.addData("Current Target of Angle: ", armAngle);
+            telemetry.addData("Current TK Pos of Angle: ", armAngle);
+            telemetry.addData("Current Target of Angle: ", angleTarget);
 
 
             telemetry.addData("Current TK Pos of Extension: ", armSubsystem.getExtenderPos());
             telemetry.addData("Current Target of Extension: ", extendTarget);
 
-            telemetry.addData("Arm X Postition", armX);
-            telemetry.addData("Arm Y Position", armY);
+
 
             telemetry.addData("Arm Angle ", armSubsystem.getAnglePosDEG());
             telemetry.addData("Arm extension ", armSubsystem.getExtenderPosIN());
@@ -165,8 +157,7 @@ public class pedroDrive extends LinearOpMode {
             //Controls ArmAngle
             //armSubsystem.setArmAngle(angleTarget);
 
-            armX = Math.cos(Math.toRadians(armSubsystem.getAnglePosDEG())) * armSubsystem.getExtenderPosIN();
-            armY = Math.sin(Math.toRadians(armSubsystem.getAnglePosDEG())) * armSubsystem.getExtenderPosIN();
+
 
             if(angleTarget >= -15){
                 angleTarget = -15;
@@ -178,10 +169,10 @@ public class pedroDrive extends LinearOpMode {
                 extendTarget = -3400;
             } else if (Math.cos(armAngle) * extendTarget >= (42-18) * ticks_in_inch)
             //Angle motor
-
+            angleController.setPID(pAngle,iAngle,dAngle);
             armAngle = armSubsystem.angleMotor.getCurrentPosition();
             anglePIDFpower = angleController.calculate(armAngle, angleTarget);
-            anglefeedForward = Math.cos(Math.toRadians(armAngle / ticks_in_degree)) * fAngle * (1 + (double) extendPos /-3400);
+            anglefeedForward = Math.cos(Math.toRadians(armAngle / ticks_in_degree)) * fAngle;
             anglePower = anglePIDFpower + anglefeedForward;
             if(anglePower > .8 ){
                 anglePower = .8;
@@ -202,7 +193,7 @@ public class pedroDrive extends LinearOpMode {
 
             //commandScheduler.run();
 
-
+            clawSubsystem.setAnglePosition(clawTarget);
             follower.setTeleOpMovementVectors(-gamepad1.left_stick_y*deflator2, -gamepad1.left_stick_x*deflator2, -gamepad1.right_stick_x*deflator2, driveCentric);
             follower.update();
 

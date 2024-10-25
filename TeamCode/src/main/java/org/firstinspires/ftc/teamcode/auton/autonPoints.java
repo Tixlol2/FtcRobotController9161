@@ -30,7 +30,7 @@ public class autonPoints {
 
 
     public Pose startRedScore = new Pose(132, 36);
-    public Pose startBlueScore = new Pose(12, 108);
+    public Pose startBlueScore = new Pose(-60, -36);
 
     public Pose startRedPark = new Pose(12, 60);
     public Pose startBluePark = new Pose(132, 84);
@@ -49,7 +49,7 @@ public class autonPoints {
 
     public Pose leftYellowSpecimenB = new Pose(46, 144);
     public Pose middleYellowSpecimenB = new Pose(46, 132);
-    public Pose rightYellowSpecimenB = new Pose(46, 120);
+    public Pose rightYellowSpecimenB = new Pose((120-72), 46-72);
 
     public Pose redSubmersible = new Pose(72, 56);
     public Pose blueSubmersible = new Pose(72, 88);
