@@ -103,7 +103,7 @@ public class ThreeWheelIMULocalizer extends Localizer {
         //replaced these with your encoder ports
         leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "leftFront"));
         rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "rightFront"));
-        strafeEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "leftRear"));
+        strafeEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "rightRear"));
 
         //reversed any encoders necessary
         leftEncoder.setDirection(Encoder.REVERSE );

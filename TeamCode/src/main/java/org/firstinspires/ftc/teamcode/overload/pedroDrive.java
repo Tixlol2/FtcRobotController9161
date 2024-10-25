@@ -35,19 +35,28 @@ public class pedroDrive extends LinearOpMode {
     //Limelight3A ll3a;
     Follower follower;
     boolean driveCentric;
-    CommandScheduler commandScheduler;
+    //CommandScheduler commandScheduler;
+
+    private PIDController angleController;
+    private PIDController extendController;
 
 
 
-    private PIDController pidFController;
 
     public  double pAngle = .0025, iAngle = 0, dAngle = 0.000, fAngle = -0.08;
+    public static double pExtend = 0.008, iExtend = 0, dExtend = 0;
     private final double ticks_in_degree = (751.8 * 4) / 360;
+    private final double ticks_in_inch = (537.7 / 112) / 25.4;
 
     private int armAngle;
+    private int extendPos;
     private double anglePower;
+    private double extendPower;
     private double anglePIDFpower;
     private double anglefeedForward;
+
+    private double armX;
+    private double armY;
 
 
 
@@ -56,20 +65,22 @@ public class pedroDrive extends LinearOpMode {
 
 
 
+        angleController = new PIDController(pAngle, iAngle, dAngle);
+        extendController = new PIDController(pExtend, iExtend, dExtend);
         waitForStart();
         //During Initialization:
         //ll3a = hardwareMap.get(Limelight3A.class, "LL3a");
 
 
 
-        commandScheduler = CommandScheduler.getInstance();
+        //commandScheduler = CommandScheduler.getInstance();
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         //hMap, name of servo used for claw
         clawSubsystem clawSubsystem = new clawSubsystem(hardwareMap, "clawAngle", "clawDriver");
         //hMap, name of motor used to change the EXTENSION HEIGHT of the arm/slides
         armSubsystem armSubsystem = new armSubsystem(hardwareMap, "armExt", "armAng");
-        armPIDFCommand armPIDFCommand = new armPIDFCommand(armSubsystem);
+        armPIDFCommand armPIDFCommand = new armPIDFCommand(armSubsystem, 0,0 );
 
 
 
@@ -128,18 +139,19 @@ public class pedroDrive extends LinearOpMode {
             // ----------------------------
 
             telemetry.addData("Current TK Pos of Angle: ", armSubsystem.getAnglePos());
-            telemetry.addData("Current Target of Angle: ", armSubsystem.getAngleTargetTK());
+            telemetry.addData("Current Target of Angle: ", armAngle);
 
 
             telemetry.addData("Current TK Pos of Extension: ", armSubsystem.getExtenderPos());
-            telemetry.addData("Current Target of Extension: ", armSubsystem.getExtTargetTK());
+            telemetry.addData("Current Target of Extension: ", extendTarget);
+
+            telemetry.addData("Arm X Postition", armX);
+            telemetry.addData("Arm Y Position", armY);
+
+            telemetry.addData("Arm Angle ", armSubsystem.getAnglePosDEG());
+            telemetry.addData("Arm extension ", armSubsystem.getExtenderPosIN());
 
 
-            telemetry.addData("Motor Power Ang", armSubsystem.angleMotor.getPower());
-            telemetry.addData("Motor Power Ext", armSubsystem.extenderMotor.getPower());
-
-            telemetry.addData("PID Power Ang", armSubsystem.anglePower);
-            telemetry.addData("PID Power Ext", armSubsystem.powerExtension);
 
 
 
@@ -153,24 +165,42 @@ public class pedroDrive extends LinearOpMode {
             //Controls ArmAngle
             //armSubsystem.setArmAngle(angleTarget);
 
-            if(angleTarget >= -10){
-                angleTarget = -10;
-            } else if (angleTarget <= -500){angleTarget = -500;}
+            armX = Math.cos(Math.toRadians(armSubsystem.getAnglePosDEG())) * armSubsystem.getExtenderPosIN();
+            armY = Math.sin(Math.toRadians(armSubsystem.getAnglePosDEG())) * armSubsystem.getExtenderPosIN();
+
+            if(angleTarget >= -15){
+                angleTarget = -15;
+            } else if (angleTarget <= -550){angleTarget = -550;}
+
+            if(extendTarget >= -50) {
+                extendTarget = -50;
+            } else if (extendTarget <= -3400 ) {
+                extendTarget = -3400;
+            } else if (Math.cos(armAngle) * extendTarget >= (42-18) * ticks_in_inch)
             //Angle motor
-            pidFController.setPID(pAngle, iAngle, dAngle);
+
             armAngle = armSubsystem.angleMotor.getCurrentPosition();
-            anglePIDFpower = pidFController.calculate(armAngle, angleTarget);
-            anglefeedForward = Math.cos(Math.toRadians(armAngle / ticks_in_degree)) * fAngle;
+            anglePIDFpower = angleController.calculate(armAngle, angleTarget);
+            anglefeedForward = Math.cos(Math.toRadians(armAngle / ticks_in_degree)) * fAngle * (1 + (double) extendPos /-3400);
             anglePower = anglePIDFpower + anglefeedForward;
             if(anglePower > .8 ){
                 anglePower = .8;
             } else if (anglePower < -.8){anglePower = -.8;}
             armSubsystem.angleMotor.setPower(anglePower);
             //Controls Extension of Arm
-            armSubsystem.setExtendTarget(extendTarget);
 
+            //Extension motor
 
-            commandScheduler.run();
+            extendController.setPID(pExtend, iExtend, dExtend);
+            extendPos = armSubsystem.extenderMotor.getCurrentPosition();
+            extendPower = extendController.calculate(extendPos, extendTarget);
+
+            if(extendPower > .8 ){
+                extendPower = .8;
+            } else if (extendPower < -.8){extendPower = -.8;}
+            armSubsystem.extenderMotor.setPower(extendPower);
+
+            //commandScheduler.run();
 
 
             follower.setTeleOpMovementVectors(-gamepad1.left_stick_y*deflator2, -gamepad1.left_stick_x*deflator2, -gamepad1.right_stick_x*deflator2, driveCentric);

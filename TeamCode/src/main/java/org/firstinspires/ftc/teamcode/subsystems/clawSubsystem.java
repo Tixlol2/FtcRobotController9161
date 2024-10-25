@@ -6,11 +6,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class clawSubsystem extends SubsystemBase {
 
-    private final Servo angleOfClaw;
-    private final Servo driverOfClaw;
+    public final Servo angleOfClaw;
+    public final Servo driverOfClaw;
     //TODO: Figure out what these values are
-    private final double open = .4;
-    private final double closed = 1;
+    public final double open = .4;
+    public final double closed = 1;
 
 
     //hMap is understandable, name is the name of the servo used

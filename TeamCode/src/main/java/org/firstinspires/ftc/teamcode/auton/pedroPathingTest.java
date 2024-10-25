@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.auton;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -13,6 +14,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Path;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
+import org.firstinspires.ftc.teamcode.subsystems.armPIDFCommand;
 import org.firstinspires.ftc.teamcode.subsystems.armSubsystem;
 
 @Autonomous
@@ -20,38 +22,52 @@ public class pedroPathingTest extends LinearOpMode {
 
     Follower follower;
 
+    CommandScheduler commandScheduler;
 
 
-
-    Pose startPose = new Pose(10, 108, 0);
-    Pose middlePose = new Pose(60, 108, 0);
-    Pose endPose = new Pose(11, 110, 180);
+    Pose startPose = new Pose(10, 10, 0);
+    Pose middlePose = new Pose(60, 10, 0);
+    Pose endPose = new Pose(20,     10, 0);
 
 
     Point middle = new Point(60, 108, Point.CARTESIAN);
     Point end = new Point(endPose);
 
-    Path path = new Path(new BezierLine(middle, end));
+    Path path = new Path(new BezierLine(new Point(startPose.getX(), startPose.getY(), Point.CARTESIAN), end));
 
-    armSubsystem armSubsystem = new armSubsystem(hardwareMap, "armExt", "armAng");
+
+
 
     @Override
     public void runOpMode() throws InterruptedException {
+        commandScheduler = CommandScheduler.getInstance();
+
+        armSubsystem armSubsystem = new armSubsystem(hardwareMap, "armExt", "armAng");
+        armPIDFCommand armPIDFCommand = new armPIDFCommand(armSubsystem, 0, 0);
+        armSubsystem.setDefaultCommand(armPIDFCommand);
+
 
         waitForStart();
         follower = new Follower(hardwareMap);
         follower.setStartingPose(startPose);
 
+        armSubsystem.setArmTarget(-20);
+
         PathChain newPath = follower.pathBuilder()
                 .addPath(path)
-                .setLinearHeadingInterpolation(0, Math.toRadians(180))
+                .setConstantHeadingInterpolation(0)
                 .build();
         follower.followPath(newPath);
-        armSubsystem.setArmAngle(-30);
+        armSubsystem.setArmAngle(-60);
 
         while(opModeIsActive()){
 
             follower.update();
+            commandScheduler.run();
+
+            follower.telemetryDebug(telemetry);
+            telemetry.update();
+
 
 
 

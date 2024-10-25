@@ -21,9 +21,13 @@ public class armSubclassTesting extends LinearOpMode {
     private PIDController controller;
 
 
-    public static int target = 0;
+    public static double x = 18;
+    public static double y = 0;
+
+    private double[] position;
 
     private final double ticks_in_degree = (751.8 * 4) / 360;
+    private final double ticks_in_inch = 537.7 / (112 / 25.4);
 
 
     CommandScheduler scheduler;
@@ -33,7 +37,7 @@ public class armSubclassTesting extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
 
-        scheduler = scheduler.getInstance();
+        //scheduler = scheduler.getInstance();
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
 
@@ -43,23 +47,39 @@ public class armSubclassTesting extends LinearOpMode {
 
 
         armSubsystem armSubsystem = new armSubsystem(hardwareMap, "armExt", "armAng");
-        armPIDFCommand armPIDFCommand = new armPIDFCommand(armSubsystem);
+        //armPIDFCommand armPIDFCommand = new armPIDFCommand(armSubsystem, 0, 0);
 
-        armSubsystem.setDefaultCommand(armPIDFCommand);
+        //armSubsystem.setDefaultCommand(armPIDFCommand);
 
 
         while(!isStopRequested()){
 
-            armSubsystem.setArmTarget(target);
+            //armSubsystem.setArmTarget((int) x);
 
-            scheduler.run();
+            //scheduler.run();
 
 
 
-            telemetry.addData("Current Pos: ", armSubsystem.getAnglePos());
-            telemetry.addData("Current Set Target: ", target);
-            telemetry.addData("Current REAL Target", armSubsystem.getAngleTargetTK());
 
+            telemetry.addData("Angle Ticks", armSubsystem.getAnglePos());
+            telemetry.addData("Angle Degrees", armSubsystem.getAnglePosDEG());
+            telemetry.addData("Extension Ticks", armSubsystem.getExtenderPos());
+            telemetry.addData("Extension Inches", armSubsystem.getExtenderPosIN());
+
+
+            telemetry.addData("Current REAL Angle Target", armSubsystem.getAngleTargetDG());
+            telemetry.addData("Current REAL Extend Target", armSubsystem.getExtTargetIN());
+
+            telemetry.addData("Current Set X: ",x );
+            telemetry.addData("Current Set Y: ",y );
+
+            position = armSubsystem.getPosition();
+
+            telemetry.addData("Current X: ", position[0]);
+            telemetry.addData("Current y: ", position[1]);
+
+            telemetry.addData("Angle Target: ", (int) (Math.toDegrees(Math.atan(y/x)) * ticks_in_degree));
+            telemetry.addData("Extension Target: ", (int) ((int) -(Math.sqrt((x)*(x) + y*y)-18) * ticks_in_inch));
             telemetry.update();
 
 
