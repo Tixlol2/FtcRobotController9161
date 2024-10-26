@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.auton;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
@@ -12,7 +13,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.subsystems.armSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.clawSubsystem;
 
-
+@Autonomous
 public class blueScore extends LinearOpMode {
 
     public PathChain path1;
@@ -90,6 +91,7 @@ public class blueScore extends LinearOpMode {
             //Main Function
             autnomousPathUpdate();
             follower.update();
+            follower.telemetryDebug(telemetry);
 
 
 
