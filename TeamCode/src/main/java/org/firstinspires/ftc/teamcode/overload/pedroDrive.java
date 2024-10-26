@@ -26,8 +26,8 @@ public class pedroDrive extends LinearOpMode {
     double deflator;
     double deflator2;
 
-    int angleTarget = 0;
-    int extendTarget = 0;
+    int angleTarget = -200;
+    int extendTarget = -60;
     double clawTarget = 0;
 
     int[] temp;
