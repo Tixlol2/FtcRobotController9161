@@ -30,6 +30,8 @@ public class pedroDrive extends LinearOpMode {
     int extendTarget = 0;
     double clawTarget = 0;
 
+    int[] temp;
+
 
 
     //Limelight3A ll3a;
@@ -67,7 +69,7 @@ public class pedroDrive extends LinearOpMode {
 
         angleController = new PIDController(pAngle, iAngle, dAngle);
         extendController = new PIDController(pExtend, iExtend, dExtend);
-        waitForStart();
+
         //During Initialization:
         //ll3a = hardwareMap.get(Limelight3A.class, "LL3a");
 
@@ -83,7 +85,10 @@ public class pedroDrive extends LinearOpMode {
         armPIDFCommand armPIDFCommand = new armPIDFCommand(armSubsystem, 0,0 );
 
 
-
+        while (!isStarted()) {
+            armSubsystem.motorCalculations(-300,0, angleController, extendController);
+            clawSubsystem.setAnglePosition(1);
+        }
 
 
 
@@ -123,9 +128,15 @@ public class pedroDrive extends LinearOpMode {
             }
 
             //Testing armSubsystem
-            clawTarget += (Math.pow(gamepad2.left_trigger + -gamepad2.right_trigger,3) * 0.1 * deflator);
-            angleTarget += (int) (Math.pow(gamepad2.left_stick_y, 3) * 4 *deflator);
+            clawTarget += (Math.pow(gamepad2.left_trigger + -gamepad2.right_trigger,3) * 0.01 * deflator);
+            angleTarget += (int) (Math.pow(gamepad2.left_stick_y, 3) * 12 *deflator);
             extendTarget += (int) (Math.pow(gamepad2.right_stick_y, 3) * 40 *deflator);
+
+            if (clawTarget > 1) {
+                clawTarget = 1;
+            } else if (clawTarget < 0) {
+                clawTarget = 0;
+            }
 
 
 
@@ -150,10 +161,24 @@ public class pedroDrive extends LinearOpMode {
 
 
 
+
+
             // ---------------
             // Motor Calculations
             // ----------------
+            if (angleTarget >= -15) {
+                angleTarget = -15;
+            } else if (angleTarget <= -590) {
+                angleTarget = -590;
+            }
 
+            if (extendTarget >= -50) {
+                extendTarget = -50;
+            } else if (extendTarget <= (2500 * Math.cos(Math.toRadians(armAngle / ticks_in_degree))) - 3800) {
+                extendTarget = (int) ((2500 * Math.cos(Math.toRadians(armAngle / ticks_in_degree))) - 3800);
+            } //else if (Math.cos(Math.toRadians(armAngle / ticks_in_degree)) * extendTarget*ticks_in_inch <= -(40 - 18) / ticks_in_inch) {
+//                extendTarget = (int) (  -(40 - 18) / ticks_in_inch/(Math.cos(Math.toRadians(armAngle / ticks_in_degree)) ));
+//            }
 //
 //            if(angleTarget >= -15){
 //                angleTarget = -15;
@@ -166,7 +191,7 @@ public class pedroDrive extends LinearOpMode {
 //            } else if (Math.cos(Math.toRadians(armAngle/ticks_in_degree)) * extendTarget >= (40-18) * ticks_in_inch) {extendTarget = (int) (Math.cos(Math.toRadians(armAngle/ticks_in_degree)) * (40-18) * ticks_in_inch);}
 //            //Angle motor
 //            angleController.setPID(pAngle,iAngle,dAngle);
-//            armAngle = armSubsystem.angleMotor.getCurrentPosition();
+           armAngle = armSubsystem.angleMotor.getCurrentPosition();
 //            anglePIDFpower = angleController.calculate(armAngle, angleTarget);
 //            anglefeedForward = Math.cos(Math.toRadians(armAngle / ticks_in_degree)) * fAngle;
 //            anglePower = anglePIDFpower + anglefeedForward;
@@ -186,6 +211,7 @@ public class pedroDrive extends LinearOpMode {
 //            armSubsystem.extenderMotor.setPower(extendPower);
 //
             armSubsystem.motorCalculations(angleTarget,extendTarget, angleController, extendController);
+
             // ----------------------------
             // Updaters
             // ----------------------------

@@ -23,7 +23,7 @@ public class armSubsystem extends SubsystemBase {
 
 
 
-    public  double pAngle = 0.0035, iAngle = 0.05, dAngle = 0, fAngle = 0;
+    public  double pAngle = 0.0045, iAngle = 0.05, dAngle = 0, fAngle = 0;
 
     public  int angleTarget = 0;
 
@@ -130,17 +130,18 @@ public class armSubsystem extends SubsystemBase {
 
         if (angleTarget >= -15) {
             angleTarget = -15;
-        } else if (angleTarget <= -550) {
-            angleTarget = -550;
+        } else if (angleTarget <= -650) {
+            angleTarget = -650;
         }
 
         if (extendTarget >= -50) {
             extendTarget = -50;
         } else if (extendTarget <= -3400) {
             extendTarget = -3400;
-        } else if (Math.cos(Math.toRadians(armAngle / ticks_in_degree)) * extendTarget >= (40 - 18) * ticks_in_inch) {
-            extendTarget = (int) (Math.cos(Math.toRadians(armAngle / ticks_in_degree)) * (40 - 18) * ticks_in_inch);
         }
+//        } else if (Math.cos(Math.toRadians(armAngle / ticks_in_degree)) * extendTarget >= (40 - 18) * ticks_in_inch) {
+//            extendTarget = (int) (Math.cos(Math.toRadians(armAngle / ticks_in_degree)) * (40 - 18) * ticks_in_inch);
+//        }
         //Angle motor
         angleController.setPID(pAngle, iAngle, dAngle);
         armAngle = angleMotor.getCurrentPosition();
@@ -166,6 +167,6 @@ public class armSubsystem extends SubsystemBase {
         }
         extenderMotor.setPower(extendPower);
 
-//        return new double[] {anglePower, extendPower};
+        //return new int[] {angleTarget, extendTarget};
     }
 }
