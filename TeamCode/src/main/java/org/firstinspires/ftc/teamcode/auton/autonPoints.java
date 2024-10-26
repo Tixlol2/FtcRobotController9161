@@ -58,10 +58,12 @@ public class autonPoints {
     public Pose blueRungMidpoint = new Pose(48, 72);
 
     public Pose redScore = new Pose(132, 12);
-    public Pose blueScore = new Pose(12, 132);
+    public Pose blueScore = new Pose(24, 120, -45);
 
     public Pose redPark = new Pose(132,132);
     public Pose bluePark = new Pose(12, 12);
+
+
 
 
 
