@@ -89,7 +89,7 @@ public class blueScore extends LinearOpMode {
 
         while(!isStopRequested()){
             //Main Function
-            autnomousPathUpdate();
+            autonomousPathUpdate();
             follower.update();
             follower.telemetryDebug(telemetry);
 
@@ -106,34 +106,41 @@ public class blueScore extends LinearOpMode {
 
     }
 
-    public void autnomousPathUpdate(){
+    public void autonomousPathUpdate(){
         switch(pathState){
             case 0:
                 follower.followPath(path1);
+                follower.update();
                 setPathState(1);
                 break;
             case 1:
                 follower.followPath(path2);
+                follower.update();
                 setPathState(2);
                 break;
             case 2:
                 follower.followPath(path3);
+                follower.update();
                 setPathState(3);
                 break;
             case 3:
                 follower.followPath(path4);
+                follower.update();
                 setPathState(4);
                 break;
             case 4:
                 follower.followPath(path5);
+                follower.update();
                 setPathState(5);
                 break;
             case 5:
                 follower.followPath(path6);
+                follower.update();
                 setPathState(6);
                 break;
             case 6:
                 follower.followPath(path7);
+                follower.update();
                 setPathState(7);
                 break;
             case 7:
@@ -145,7 +152,7 @@ public class blueScore extends LinearOpMode {
 
     public void setPathState(int state){
         pathState = state;
-        autnomousPathUpdate();
+        autonomousPathUpdate();
     }
 
 }
