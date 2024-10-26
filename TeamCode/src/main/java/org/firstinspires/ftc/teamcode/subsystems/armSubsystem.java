@@ -2,13 +2,8 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
-import com.arcrobotics.ftclib.controller.PIDFController;
-import com.arcrobotics.ftclib.hardware.motors.Motor;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
-import org.firstinspires.ftc.teamcode.pedroPathing.localization.Encoder;
 
 public class armSubsystem extends SubsystemBase {
 
@@ -26,7 +21,7 @@ public class armSubsystem extends SubsystemBase {
     private double armX;
     private double armY;
 
-    private PIDController pidFController;
+
 
     public  double pAngle = 0.0035, iAngle = 0.05, dAngle = 0, fAngle = 0;
 
@@ -35,24 +30,19 @@ public class armSubsystem extends SubsystemBase {
 
 
     private int armAngle;
-    public double anglePower;
-    private double anglePIDFpower;
-    private double anglefeedForward;
+
+
 
     private final double ticks_in_degree = (751.8 * 3) / 360;
 
     private final double ticks_in_inch = 537.7 / (112 / 25.4);
 
-    private PIDController pidController;
+
 
     public  double pExtend = 0.008, iExtend = 0.05, dExtend = 0, fExtend = 0;
 
     public  int target_in_ticksExtend = 0;
 
-
-    private int extendPos;
-    public double powerExtension;
-    private double PIDFpowerExtend;
 
 
 
@@ -63,8 +53,9 @@ public class armSubsystem extends SubsystemBase {
 
     }
 
-
-
+    // ----------------
+    // Setters
+    // ----------------
 
     public void setArmAngle(int degrees){
         targetDG = degrees;
@@ -75,6 +66,10 @@ public class armSubsystem extends SubsystemBase {
         targetTK = ticks;
     }
 
+
+    // ----------------
+    // Getters
+    // ----------------
     public int getAngleTargetTK(){
         return targetTK;
     }
@@ -95,14 +90,9 @@ public class armSubsystem extends SubsystemBase {
     public int getExtenderPosIN(){return (int) (extenderMotor.getCurrentPosition() / ticks_in_inch);}
     public int getAnglePosDEG(){return (int) (angleMotor.getCurrentPosition() / ticks_in_degree);}
 
-    public void resetEncoders(){
-        angleMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        extenderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        angleMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        extenderMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-    }
+    // ----------------
+    // Kinematics
+    // ----------------
 
     public double[] getPosition() {
         armX = Math.cos(Math.toRadians(getAnglePosDEG())) * (getExtenderPosIN() - 18);
@@ -121,4 +111,61 @@ public class armSubsystem extends SubsystemBase {
 
     }
 
+
+    // ----------------
+    // Calculations
+    // ----------------
+
+
+
+    public void motorCalculations(int angleTarget, int extendTarget, PIDController angleController, PIDController extendController) {
+        double anglePower;
+        double extendPower;
+        double anglefeedForward;
+        double anglePIDFpower;
+        int extendPos;
+
+
+        double anglePIDFPower;
+
+        if (angleTarget >= -15) {
+            angleTarget = -15;
+        } else if (angleTarget <= -550) {
+            angleTarget = -550;
+        }
+
+        if (extendTarget >= -50) {
+            extendTarget = -50;
+        } else if (extendTarget <= -3400) {
+            extendTarget = -3400;
+        } else if (Math.cos(Math.toRadians(armAngle / ticks_in_degree)) * extendTarget >= (40 - 18) * ticks_in_inch) {
+            extendTarget = (int) (Math.cos(Math.toRadians(armAngle / ticks_in_degree)) * (40 - 18) * ticks_in_inch);
+        }
+        //Angle motor
+        angleController.setPID(pAngle, iAngle, dAngle);
+        armAngle = angleMotor.getCurrentPosition();
+        anglePIDFpower = angleController.calculate(armAngle, angleTarget);
+        anglefeedForward = Math.cos(Math.toRadians(armAngle / ticks_in_degree)) * fAngle;
+        anglePower = anglePIDFpower + anglefeedForward;
+        if (anglePower > .8) {
+            anglePower = .8;
+        } else if (anglePower < -.8) {
+            anglePower = -.8;
+        }
+        angleMotor.setPower(anglePower);
+
+        //Extension motor
+        extendController.setPID(pExtend, iExtend, dExtend);
+        extendPos = extenderMotor.getCurrentPosition();
+        extendPower = extendController.calculate(extendPos, extendTarget);
+
+        if (extendPower > .8) {
+            extendPower = .8;
+        } else if (extendPower < -.8) {
+            extendPower = -.8;
+        }
+        extenderMotor.setPower(extendPower);
+
+//        return new double[] {anglePower, extendPower};
+    }
 }

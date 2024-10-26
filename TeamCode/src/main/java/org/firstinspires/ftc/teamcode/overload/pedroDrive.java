@@ -97,7 +97,8 @@ public class pedroDrive extends LinearOpMode {
 
 
         while (opModeIsActive()) {
-            //Drive
+            //-----------------------------
+            //Input
             // ----------------------------
 
             deflator = gamepad2.left_bumper && gamepad2.right_bumper ? 0.5 : gamepad2.left_bumper ? 0.7 : 1;
@@ -128,23 +129,19 @@ public class pedroDrive extends LinearOpMode {
 
 
             // ----------------------------
-            // Updaters
+            // Telemetry
             // ----------------------------
 
-            telemetry.addData("Current TK Pos of Angle: ", armAngle);
-            telemetry.addData("Current Target of Angle: ", angleTarget);
+            telemetry.addData("Current Angle in Ticks: ", armAngle);
+            telemetry.addData("Current Angle Target in Ticks: ", angleTarget);
 
 
-            telemetry.addData("Current TK Pos of Extension: ", armSubsystem.getExtenderPos());
-            telemetry.addData("Current Target of Extension: ", extendTarget);
+            telemetry.addData("Current Extension in Ticks: ", armSubsystem.getExtenderPos());
+            telemetry.addData("Current Extension Target in Ticks: ", extendTarget);
 
 
-
-            telemetry.addData("Arm Angle ", armSubsystem.getAnglePosDEG());
-            telemetry.addData("Arm extension ", armSubsystem.getExtenderPosIN());
-
-
-
+            telemetry.addData("Arm Angle: ", armSubsystem.getAnglePosDEG());
+            telemetry.addData("Arm extension: ", armSubsystem.getExtenderPosIN());
 
 
             telemetry.addLine("Don't Crash!");
@@ -152,54 +149,51 @@ public class pedroDrive extends LinearOpMode {
 
 
 
+            // ---------------
+            // Motor Calculations
+            // ----------------
 
-
-            //Controls ArmAngle
-            //armSubsystem.setArmAngle(angleTarget);
-
-
-
-            if(angleTarget >= -15){
-                angleTarget = -15;
-            } else if (angleTarget <= -550){angleTarget = -550;}
-
-            if(extendTarget >= -50) {
-                extendTarget = -50;
-            } else if (extendTarget <= -3400 ) {
-                extendTarget = -3400;
-            } else if (Math.cos(armAngle) * extendTarget >= (42-18) * ticks_in_inch)
-            //Angle motor
-            angleController.setPID(pAngle,iAngle,dAngle);
-            armAngle = armSubsystem.angleMotor.getCurrentPosition();
-            anglePIDFpower = angleController.calculate(armAngle, angleTarget);
-            anglefeedForward = Math.cos(Math.toRadians(armAngle / ticks_in_degree)) * fAngle;
-            anglePower = anglePIDFpower + anglefeedForward;
-            if(anglePower > .8 ){
-                anglePower = .8;
-            } else if (anglePower < -.8){anglePower = -.8;}
-            armSubsystem.angleMotor.setPower(anglePower);
-            //Controls Extension of Arm
-
-            //Extension motor
-
-            extendController.setPID(pExtend, iExtend, dExtend);
-            extendPos = armSubsystem.extenderMotor.getCurrentPosition();
-            extendPower = extendController.calculate(extendPos, extendTarget);
-
-            if(extendPower > .8 ){
-                extendPower = .8;
-            } else if (extendPower < -.8){extendPower = -.8;}
-            armSubsystem.extenderMotor.setPower(extendPower);
-
-            //commandScheduler.run();
+//
+//            if(angleTarget >= -15){
+//                angleTarget = -15;
+//            } else if (angleTarget <= -550){angleTarget = -550;}
+//
+//            if(extendTarget >= -50) {
+//                extendTarget = -50;
+//            } else if (extendTarget <= -3400 ) {
+//                extendTarget = -3400;
+//            } else if (Math.cos(Math.toRadians(armAngle/ticks_in_degree)) * extendTarget >= (40-18) * ticks_in_inch) {extendTarget = (int) (Math.cos(Math.toRadians(armAngle/ticks_in_degree)) * (40-18) * ticks_in_inch);}
+//            //Angle motor
+//            angleController.setPID(pAngle,iAngle,dAngle);
+//            armAngle = armSubsystem.angleMotor.getCurrentPosition();
+//            anglePIDFpower = angleController.calculate(armAngle, angleTarget);
+//            anglefeedForward = Math.cos(Math.toRadians(armAngle / ticks_in_degree)) * fAngle;
+//            anglePower = anglePIDFpower + anglefeedForward;
+//            if(anglePower > .8 ){
+//                anglePower = .8;
+//            } else if (anglePower < -.8){anglePower = -.8;}
+//            armSubsystem.angleMotor.setPower(anglePower);
+//
+//            //Extension motor
+//            extendController.setPID(pExtend, iExtend, dExtend);
+//            extendPos = armSubsystem.extenderMotor.getCurrentPosition();
+//            extendPower = extendController.calculate(extendPos, extendTarget);
+//
+//            if(extendPower > .8 ){
+//                extendPower = .8;
+//            } else if (extendPower < -.8){extendPower = -.8;}
+//            armSubsystem.extenderMotor.setPower(extendPower);
+//
+            armSubsystem.motorCalculations(angleTarget,extendTarget, angleController, extendController);
+            // ----------------------------
+            // Updaters
+            // ----------------------------
 
             clawSubsystem.setAnglePosition(clawTarget);
             follower.setTeleOpMovementVectors(-gamepad1.left_stick_y*deflator2, -gamepad1.left_stick_x*deflator2, -gamepad1.right_stick_x*deflator2, driveCentric);
             follower.update();
 
-            //Call telemetry at the end because the smart guy on the FTC discord server said to
             telemetry.update();
-            // ----------------------------
         }
 
 
