@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.subsystems.clawOpenCommand;
 import org.firstinspires.ftc.teamcode.subsystems.clawSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.grabSpecimen;
 
-@Autonomous
+
 public class redScore extends LinearOpMode {
 
 

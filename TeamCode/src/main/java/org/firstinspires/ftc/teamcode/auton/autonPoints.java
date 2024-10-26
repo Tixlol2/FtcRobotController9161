@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.auton;
 
-import com.acmerobotics.roadrunner.Pose2d;
-
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 
 public class autonPoints {
@@ -29,39 +27,39 @@ public class autonPoints {
      */
 
 
-    public Pose startRedScore = new Pose(-36, -60);
-    public Pose startBlueScore = new Pose(36, 60);
+    public Pose startRedScore = new Pose(-60, -60, Math.toRadians(-90));
+    public Pose startBlueScore = new Pose(60, 60, Math.toRadians(90));
 
-    public Pose startRedPark = new Pose(12, 60);
-    public Pose startBluePark = new Pose(132, 84);
+    public Pose startRedPark = new Pose(-60, 12, Math.toRadians(-90));
+    public Pose startBluePark = new Pose(60, -12, Math.toRadians(90));
 
-    public Pose leftRedSpecimen = new Pose(98, 120);
-    public Pose middleRedSpecimen = new Pose(98, 132);
-    public Pose rightRedSpecimen = new Pose(98, 144);
+    public Pose leftRedSpecimen = new Pose(-50, 50);
+    public Pose middleRedSpecimen = new Pose(-50, 60);
+    public Pose rightRedSpecimen = new Pose(-50, 70);
 
-    public Pose leftBlueSpecimen = new Pose(46, 0);
-    public Pose middleBlueSpecimen = new Pose(46, 12);
-    public Pose rightBlueSpecimen = new Pose(46, 24);
+    public Pose leftBlueSpecimen = new Pose(50, -50);
+    public Pose middleBlueSpecimen = new Pose(50, -60);
+    public Pose rightBlueSpecimen = new Pose(50, -70);
 
-    public Pose leftYellowSpecimenR = new Pose(98, 0);
-    public Pose middleYellowSpecimenR = new Pose(98, 12);
-    public Pose rightYellowSpecimenR = new Pose(98, 24);
+    public Pose leftYellowSpecimenR = new Pose(-26, -70);
+    public Pose middleYellowSpecimenR = new Pose(-26, -58);
+    public Pose rightYellowSpecimenR = new Pose(-26, -46);
 
-    public Pose leftYellowSpecimenB = new Pose(46, 144);
-    public Pose middleYellowSpecimenB = new Pose(46, 132);
-    public Pose rightYellowSpecimenB = new Pose((120-72), 46-72);
+    public Pose leftYellowSpecimenB = new Pose(26, 70);
+    public Pose middleYellowSpecimenB = new Pose(26, 58);
+    public Pose rightYellowSpecimenB = new Pose(26, 46);
 
-    public Pose redSubmersible = new Pose(72, 56);
-    public Pose blueSubmersible = new Pose(72, 88);
+    public Pose redSubmersibleMidpoint = new Pose(0, -16);
+    public Pose blueSubmersibleMidpoint = new Pose(0, 16);
 
-    public Pose redRungMidpoint = new Pose(96, 72);
-    public Pose blueRungMidpoint = new Pose(48, 72);
+    public Pose redRungMidpoint = new Pose(-24, 0);
+    public Pose blueRungMidpoint = new Pose(24, 0);
 
-    public Pose redScore = new Pose(132, 12);
-    public Pose blueScore = new Pose(-24, 24, -45);
+    public Pose redScore = new Pose(-48, -48, Math.toRadians(45));
+    public Pose blueScore = new Pose(48, 48, Math.toRadians(-45));
 
-    public Pose redPark = new Pose(132,132);
-    public Pose bluePark = new Pose(-60, -60);
+    public Pose redPark = new Pose(-60,48);
+    public Pose bluePark = new Pose(60, -48);
 
 
 
