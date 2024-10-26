@@ -22,7 +22,8 @@ public class blueScore extends LinearOpMode {
     public PathChain path5;
     public PathChain path6;
     public PathChain path7;
-
+    public Follower follower;
+    public int pathState = 0;
 
 
     @Override
@@ -31,7 +32,7 @@ public class blueScore extends LinearOpMode {
         autonPoints autonPoints = new autonPoints();
         armSubsystem armSubsystem = new armSubsystem(hardwareMap, "armExt", "armAng");
         clawSubsystem clawSubsystem = new clawSubsystem(hardwareMap, "clawAngle", "clawDriver");
-        Follower follower = new Follower(hardwareMap);
+        follower = new Follower(hardwareMap);
         follower.resetIMU();
         follower.setStartingPose(autonPoints.startBlueScore);
 
@@ -67,7 +68,7 @@ public class blueScore extends LinearOpMode {
                 .build();
         //Go park
         path7 = follower.pathBuilder()
-                .addPath(new Path(new BezierCurve(new Point(autonPoints.blueScore), new Point(autonPoints.bluePark), new Point(new Pose(50, 72.5)))))
+                .addPath(new Path(new BezierCurve(new Point(autonPoints.blueScore), new Point(autonPoints.bluePark), new Point(new Pose(-60, -36)))))
                 .setLinearHeadingInterpolation(-45, 0)
                 .build();
 
@@ -85,10 +86,64 @@ public class blueScore extends LinearOpMode {
 
 
 
+        while(!isStopRequested()){
+            //Main Function
+            autnomousPathUpdate();
+            follower.update();
+
+
+
+
+        }
+
+
 
 
 
 
 
     }
+
+    public void autnomousPathUpdate(){
+        switch(pathState){
+            case 0:
+                follower.followPath(path1);
+                setPathState(1);
+                break;
+            case 1:
+                follower.followPath(path2);
+                setPathState(2);
+                break;
+            case 2:
+                follower.followPath(path3);
+                setPathState(3);
+                break;
+            case 3:
+                follower.followPath(path4);
+                setPathState(4);
+                break;
+            case 4:
+                follower.followPath(path5);
+                setPathState(5);
+                break;
+            case 5:
+                follower.followPath(path6);
+                setPathState(6);
+                break;
+            case 6:
+                follower.followPath(path7);
+                setPathState(7);
+                break;
+            case 7:
+                telemetry.addLine("Finished");
+                break;
+
+        }
+    }
+
+    public void setPathState(int state){
+        pathState = state;
+        autnomousPathUpdate();
+    }
+
 }
