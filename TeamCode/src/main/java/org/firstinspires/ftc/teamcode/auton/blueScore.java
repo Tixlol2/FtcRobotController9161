@@ -67,7 +67,7 @@ public class blueScore extends LinearOpMode {
                 .build();
         //Go park
         path7 = follower.pathBuilder()
-                .addPath(new Path(new BezierCurve(new Point(new Pose(24, 120)), new Point(new Pose(12, 32)), new Point(new Pose(50, 72.5)))))
+                .addPath(new Path(new BezierCurve(new Point(autonPoints.blueScore), new Point(autonPoints.bluePark), new Point(new Pose(50, 72.5)))))
                 .setLinearHeadingInterpolation(-45, 0)
                 .build();
 
