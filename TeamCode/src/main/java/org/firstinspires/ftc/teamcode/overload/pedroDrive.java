@@ -123,7 +123,7 @@ public class pedroDrive extends LinearOpMode {
             }
 
             //Testing armSubsystem
-            clawTarget += (Math.pow(gamepad2.left_trigger + -gamepad2.right_trigger,2) * 0.1 * deflator);
+            clawTarget += (Math.pow(gamepad2.left_trigger + -gamepad2.right_trigger,3) * 0.1 * deflator);
             angleTarget += (int) (Math.pow(gamepad2.left_stick_y, 3) * 4 *deflator);
             extendTarget += (int) (Math.pow(gamepad2.right_stick_y, 3) * 40 *deflator);
 
