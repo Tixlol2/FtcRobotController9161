@@ -65,6 +65,7 @@ public class bluePark extends LinearOpMode {
 
         path1 = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(autonPoints.startBluePark), new Point(autonPoints.bluePark)))
+                .setConstantHeadingInterpolation(autonPoints.startBluePark.getHeading())
                 .build();
 
 

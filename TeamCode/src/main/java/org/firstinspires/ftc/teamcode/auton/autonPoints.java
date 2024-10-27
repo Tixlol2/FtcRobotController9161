@@ -27,15 +27,16 @@ public class autonPoints {
      */
 
 
-    public Pose startRedScore = new Pose(-60, -60, Math.toRadians(-90));
-    public Pose startBlueScore = new Pose(60, 60, Math.toRadians(90));
+    public Pose startRedScore = new Pose(-36, -60, Math.toRadians(90));
+    public Pose startBlueScore = new Pose(-36, 60, Math.toRadians(-90));
 
-    public Pose startRedPark = new Pose(-60, 12, Math.toRadians(-90));
-    public Pose startBluePark = new Pose(60, -12, Math.toRadians(90));
+    public Pose startRedPark = new Pose(12, -60, Math.toRadians(90));
+    public Pose startBluePark = new Pose(-12, 60, Math.toRadians(-90));
 
     public Pose leftRedSpecimen = new Pose(-50, 50);
     public Pose middleRedSpecimen = new Pose(-50, 60);
     public Pose rightRedSpecimen = new Pose(-50, 70);
+
 
     public Pose leftBlueSpecimen = new Pose(50, -50);
     public Pose middleBlueSpecimen = new Pose(50, -60);
@@ -53,13 +54,13 @@ public class autonPoints {
     public Pose blueSubmersibleMidpoint = new Pose(0, 16);
 
     public Pose redRungMidpoint = new Pose(-24, 0);
-    public Pose blueRungMidpoint = new Pose(24, 0);
+    public Pose blueRungMidpoint = new Pose(0, 24);
 
     public Pose redScore = new Pose(-48, -48, Math.toRadians(45));
     public Pose blueScore = new Pose(48, 48, Math.toRadians(-45));
 
-    public Pose redPark = new Pose(-60,48);
-    public Pose bluePark = new Pose(60, -48);
+    public Pose redPark = new Pose(48,-60);
+    public Pose bluePark = new Pose(-48, 60);
 
 
 
